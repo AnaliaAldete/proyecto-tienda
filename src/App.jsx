@@ -1,10 +1,12 @@
 import "./App.css";
 import { ContainerProductos } from "./componentes/ContainerProductos";
+import { NavBar } from "./componentes/NavBar";
 
 function App() {
 	return (
 		<>
-			<ContainerProductos></ContainerProductos>
+			<NavBar />
+			<ContainerProductos />
 		</>
 	);
 }
