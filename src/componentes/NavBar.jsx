@@ -15,12 +15,14 @@ import {
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaUserCircle } from "react-icons/fa";
 import { Carrito } from "../componentes/Carrito";
+import { DrawerCarrito } from "../componentes/Drawer";
 
 const pages = ["Productos", "Ordenes"];
 
 export function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
 	const [anchorElUser, setAnchorElUser] = React.useState(null);
+	const [drawerOpen, setDrawerOpen] = React.useState(false);
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -37,11 +39,15 @@ export function NavBar() {
 		setAnchorElUser(null);
 	};
 
+	const toggleDrawer = (open) => (event) => {
+		setDrawerOpen(open);
+	};
+
 	return (
 		<AppBar position="static">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
-					{/* img del logo aqui */}
+					{/* logo */}
 					<Typography
 						variant="h6"
 						noWrap
@@ -97,7 +103,7 @@ export function NavBar() {
 							))}
 						</Menu>
 					</Box>
-					{/* img logo aqui */}
+					{/* logo */}
 					<Typography
 						variant="h5"
 						noWrap
@@ -128,7 +134,7 @@ export function NavBar() {
 					</Box>
 
 					<Box display="flex" gap="16px" sx={{ flexGrow: 0 }}>
-						<Carrito />
+						<Carrito toggleDrawer={toggleDrawer} />
 						<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 								<FaUserCircle />
@@ -157,6 +163,7 @@ export function NavBar() {
 					</Box>
 				</Toolbar>
 			</Container>
+			<DrawerCarrito open={drawerOpen} toggleDrawer={toggleDrawer} />
 		</AppBar>
 	);
 }
