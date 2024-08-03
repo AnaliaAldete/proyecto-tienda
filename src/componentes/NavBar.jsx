@@ -46,7 +46,7 @@ export function NavBar() {
 
 	return (
 		<AppBar position="static">
-			<Container maxWidth="xl">
+			<Container maxWidth="xl" sx={{ padding: "8px 24px 8px 24px" }}>
 				<Toolbar disableGutters>
 					<Box
 						component="img"

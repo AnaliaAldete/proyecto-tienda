@@ -1,16 +1,33 @@
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect } from "react";
-import { db } from "../../firebase";
+import { Box, Grid } from "@mui/material";
+import { useContext } from "react";
+import { OrderContext } from "../context/OrderContext";
+import { CardProducto } from "./CardProducto";
 
 export const ContainerProductos = () => {
-	useEffect(() => {
-		const getProductos = async () => {
-			const collectionReference = collection(db, "productos");
-			const data = await getDocs(collectionReference);
-			console.log(data);
-		};
-		getProductos();
-	}, []);
-
-	return <div>hola</div>;
+	const { productosArray } = useContext(OrderContext);
+	return (
+		<Box sx={{ flexGrow: 1, padding: 4 }}>
+			<Grid container spacing={2}>
+				{productosArray.map((producto) => (
+					<Grid
+						item
+						xs={12}
+						sm={6}
+						md={4}
+						display="flex"
+						justifyContent="center"
+						key={producto.id}
+					>
+						<CardProducto
+							nombre={producto.nombre}
+							precio={producto.precio}
+							descripcion={producto.descripcion}
+							descripcionLarga={producto.descripcionLarga}
+							imagen={producto.imagen}
+						/>
+					</Grid>
+				))}
+			</Grid>
+		</Box>
+	);
 };
