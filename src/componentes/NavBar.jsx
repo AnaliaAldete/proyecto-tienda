@@ -17,6 +17,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { Carrito } from "../componentes/Carrito";
 import { DrawerCarrito } from "../componentes/Drawer";
 import logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
 
 const pages = ["Productos", "Ordenes"];
 
@@ -111,7 +112,14 @@ export function NavBar() {
 						>
 							{pages.map((page) => (
 								<MenuItem key={page} onClick={handleCloseNavMenu}>
-									<Typography textAlign="center">{page}</Typography>
+									<Typography textAlign="center">
+										<Link
+											to={`/${page}`}
+											style={{ textDecoration: "none", color: "inherit" }}
+										>
+											{page}
+										</Link>
+									</Typography>
 								</MenuItem>
 							))}
 						</Menu>
@@ -148,13 +156,16 @@ export function NavBar() {
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
-							<Button
-								key={page}
-								onClick={handleCloseNavMenu}
-								sx={{ my: 2, color: "white", display: "block" }}
-							>
-								{page}
-							</Button>
+							<MenuItem key={page} onClick={handleCloseNavMenu}>
+								<Typography textAlign="center">
+									<Link
+										to={`/${page}`}
+										style={{ textDecoration: "none", color: "inherit" }}
+									>
+										{page}
+									</Link>
+								</Typography>
+							</MenuItem>
 						))}
 					</Box>
 
