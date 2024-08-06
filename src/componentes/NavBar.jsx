@@ -77,7 +77,12 @@ export function NavBar() {
 							textDecoration: "none",
 						}}
 					>
-						TechLink
+						<Link
+							to={"/Productos"}
+							style={{ textDecoration: "none", color: "inherit" }}
+						>
+							TechLink
+						</Link>
 					</Typography>
 
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -173,7 +178,12 @@ export function NavBar() {
 						<Carrito toggleDrawer={toggleDrawer} />
 						<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<FaUserCircle />
+								<Link
+									to={"/Login"}
+									style={{ textDecoration: "none", color: "inherit" }}
+								>
+									<FaUserCircle />
+								</Link>
 							</IconButton>
 						</Tooltip>
 						<Menu

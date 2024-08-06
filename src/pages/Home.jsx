@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import { useContext } from "react";
 import { OrderContext } from "../context/OrderContext";
-import { CardProducto } from "./CardProducto";
+import { CardProducto } from "../componentes/CardProducto";
 
 export const ContainerProductos = () => {
 	const { productosArray } = useContext(OrderContext);
