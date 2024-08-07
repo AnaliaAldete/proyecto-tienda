@@ -14,7 +14,6 @@ export const OrderProvider = ({ children }) => {
 				return { ...producto.data(), id: producto.id };
 			});
 			setProductosArray(NewProductosArray);
-			console.log(data);
 		});
 	}, []);
 

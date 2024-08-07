@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { TextField, Button, Typography, Container, Box } from "@mui/material";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export const Registro = () => {
 	const {
@@ -15,15 +17,30 @@ export const Registro = () => {
 
 	const onSubmit = (data) => {
 		const auth = getAuth();
+
+		const registroNuevoUsuario = async (nuevoUsuario) => {
+			try {
+				await setDoc(doc(db, "usuarios", nuevoUsuario.id), nuevoUsuario);
+			} catch (err) {
+				console.log(err);
+			}
+		};
 		createUserWithEmailAndPassword(auth, data.email, data.contraseña)
 			.then((userCredential) => {
-				const user = userCredential.user;
+				const usuario = {
+					nombre: data.nombre,
+					email: data.email,
+					ordenes: [],
+					carrito: [],
+					id: userCredential.user.uid,
+				};
+				registroNuevoUsuario(usuario);
 				navigate("/");
 			})
 			.catch((error) => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-				// ..
+				console.error(`Error ${errorCode}: ${errorMessage}`);
 			});
 	};
 
@@ -47,11 +64,11 @@ export const Registro = () => {
 							label="Nombre de Usuario"
 							variant="outlined"
 							fullWidth
-							{...register("username", {
+							{...register("nombre", {
 								required: "El nombre de usuario es requerido",
 							})}
-							error={!!errors.username}
-							helperText={errors.username ? errors.username.message : ""}
+							error={!!errors.nombre}
+							helperText={errors.nombre ? errors.nombre.message : ""}
 						/>
 					</Box>
 

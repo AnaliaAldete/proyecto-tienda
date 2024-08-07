@@ -14,13 +14,11 @@ export const Login = () => {
 	const navigate = useNavigate();
 
 	const onSubmit = (data) => {
-		console.log(data);
 		const auth = getAuth();
 		signInWithEmailAndPassword(auth, data.email, data.contraseña)
 			.then((userCredential) => {
 				const user = userCredential.user;
 				navigate("/");
-				console.log("entro");
 			})
 			.catch((error) => {
 				const errorCode = error.code;
