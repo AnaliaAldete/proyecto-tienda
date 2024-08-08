@@ -83,7 +83,7 @@ export const Login = () => {
 						color="primary"
 						sx={{ mt: 2 }}
 					>
-						Ingresar
+						INICIAR SESIÓN
 					</Button>
 				</form>
 			</Box>

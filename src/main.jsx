@@ -5,14 +5,17 @@ import "./index.css";
 import { CssBaseline } from "@mui/material";
 import { OrderProvider } from "./context/OrderContext.jsx";
 import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./context/UserContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<BrowserRouter>
-		<OrderProvider>
-			<React.StrictMode>
-				<CssBaseline />
-				<App />
-			</React.StrictMode>
-		</OrderProvider>
+		<UserProvider>
+			<OrderProvider>
+				<React.StrictMode>
+					<CssBaseline />
+					<App />
+				</React.StrictMode>
+			</OrderProvider>
+		</UserProvider>
 	</BrowserRouter>
 );

@@ -7,17 +7,19 @@ import {
 	Typography,
 	Menu,
 	Container,
-	Button,
-	Tooltip,
 	MenuItem,
+	Avatar,
 } from "@mui/material";
-import { useState } from "react";
+import { pink } from "@mui/material/colors";
+import { useState, useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUserCircle } from "react-icons/fa";
 import { Carrito } from "../componentes/Carrito";
 import { DrawerCarrito } from "../componentes/Drawer";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const pages = ["Productos", "Ordenes"];
 
@@ -25,6 +27,8 @@ export function NavBar() {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const [drawerOpen, setDrawerOpen] = useState(false);
+	const navigate = useNavigate();
+	const { usuario } = useContext(UserContext);
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -43,6 +47,17 @@ export function NavBar() {
 
 	const toggleDrawer = (open) => (event) => {
 		setDrawerOpen(open);
+	};
+
+	const handleLogOut = () => {
+		const auth = getAuth();
+		signOut(auth)
+			.then(() => {
+				navigate("/login");
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
@@ -76,10 +91,7 @@ export function NavBar() {
 							textDecoration: "none",
 						}}
 					>
-						<Link
-							to={"/Productos"}
-							style={{ textDecoration: "none", color: "inherit" }}
-						>
+						<Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
 							TechLink
 						</Link>
 					</Typography>
@@ -174,36 +186,51 @@ export function NavBar() {
 
 					<Box display="flex" gap="16px" sx={{ flexGrow: 0 }}>
 						<Carrito toggleDrawer={toggleDrawer} />
-						<Tooltip title="Open settings">
-							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+
+						<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+							{usuario ? (
+								<Avatar sx={{ width: 35, height: 35, bgcolor: pink[500] }}>
+									{usuario.nombre ? usuario.nombre[0].toUpperCase() : "U"}
+								</Avatar>
+							) : (
 								<Link
 									to={"/Login"}
 									style={{ textDecoration: "none", color: "inherit" }}
 								>
-									<FaUserCircle />
+									<Avatar
+										src="/broken-image.jpg"
+										sx={{ width: 35, height: 35 }}
+									/>
 								</Link>
-							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: "45px" }}
-							id="menu-appbar"
-							anchorEl={anchorElUser}
-							anchorOrigin={{
-								vertical: "top",
-								horizontal: "right",
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "right",
-							}}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}
-						>
-							<MenuItem onClick={handleCloseUserMenu}>
-								<Typography textAlign="center">Cerrar sesión</Typography>
-							</MenuItem>
-						</Menu>
+							)}
+						</IconButton>
+						{usuario && (
+							<Menu
+								sx={{ mt: "45px" }}
+								id="menu-appbar"
+								anchorEl={anchorElUser}
+								anchorOrigin={{
+									vertical: "top",
+									horizontal: "right",
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: "top",
+									horizontal: "right",
+								}}
+								open={Boolean(anchorElUser)}
+								onClose={handleCloseUserMenu}
+							>
+								<MenuItem
+									onClick={() => {
+										handleCloseUserMenu();
+										handleLogOut();
+									}}
+								>
+									<Typography textAlign="center">Cerrar sesión</Typography>
+								</MenuItem>
+							</Menu>
+						)}
 					</Box>
 				</Toolbar>
 			</Container>
