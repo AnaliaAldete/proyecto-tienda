@@ -1,4 +1,6 @@
 import React from "react";
+import { useContext } from "react";
+import { OrderContext } from "../context/OrderContext";
 import {
 	Card,
 	CardContent,
@@ -26,6 +28,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export const CardProducto = ({
+	id,
 	nombre,
 	precio,
 	descripcion,
@@ -33,6 +36,7 @@ export const CardProducto = ({
 	descripcionLarga,
 }) => {
 	const [expanded, setExpanded] = React.useState(false);
+	const { agregarAlCarrito } = useContext(OrderContext);
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
@@ -67,7 +71,11 @@ export const CardProducto = ({
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing sx={{ paddingTop: 0 }}>
-				<Button variant="contained" size="small">
+				<Button
+					variant="contained"
+					size="small"
+					onClick={() => agregarAlCarrito({ nombre, precio, id, imagen })}
+				>
 					Agregar al carrito
 				</Button>
 				<ExpandMore

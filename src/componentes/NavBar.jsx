@@ -15,7 +15,6 @@ import { useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Carrito } from "../componentes/Carrito";
-import { DrawerCarrito } from "../componentes/Drawer";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
@@ -24,11 +23,10 @@ import { useNavigate } from "react-router-dom";
 const pages = ["Productos", "Ordenes"];
 
 export function NavBar() {
+	const { usuario } = useContext(UserContext);
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
-	const [drawerOpen, setDrawerOpen] = useState(false);
 	const navigate = useNavigate();
-	const { usuario } = useContext(UserContext);
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -43,10 +41,6 @@ export function NavBar() {
 
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
-	};
-
-	const toggleDrawer = (open) => (event) => {
-		setDrawerOpen(open);
 	};
 
 	const handleLogOut = () => {
@@ -185,7 +179,7 @@ export function NavBar() {
 					</Box>
 
 					<Box display="flex" gap="16px" sx={{ flexGrow: 0 }}>
-						<Carrito toggleDrawer={toggleDrawer} />
+						<Carrito />
 
 						<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 							{usuario ? (
@@ -234,7 +228,6 @@ export function NavBar() {
 					</Box>
 				</Toolbar>
 			</Container>
-			<DrawerCarrito open={drawerOpen} toggleDrawer={toggleDrawer} />
 		</AppBar>
 	);
 }

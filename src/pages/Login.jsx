@@ -57,6 +57,9 @@ export const Login = () => {
 							})}
 							error={!!errors.email}
 							helperText={errors.email ? errors.email.message : ""}
+							InputProps={{
+								autoComplete: "email",
+							}}
 						/>
 					</Box>
 					<Box sx={{ mb: 2 }}>
@@ -75,6 +78,9 @@ export const Login = () => {
 							})}
 							error={!!errors.contraseña}
 							helperText={errors.contraseña ? errors.contraseña.message : ""}
+							InputProps={{
+								autoComplete: "current-password",
+							}}
 						/>
 					</Box>
 					<Button

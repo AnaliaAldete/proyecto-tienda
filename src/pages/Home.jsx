@@ -24,6 +24,7 @@ export const ContainerProductos = () => {
 							descripcion={producto.descripcion}
 							descripcionLarga={producto.descripcionLarga}
 							imagen={producto.imagen}
+							id={producto.id}
 						/>
 					</Grid>
 				))}
