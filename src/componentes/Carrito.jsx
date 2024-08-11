@@ -13,10 +13,12 @@ import {
 } from "@mui/material";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { TiDelete } from "react-icons/ti";
 import { OrderContext } from "../context/OrderContext";
 
 export const Carrito = () => {
-	const { carrito } = useContext(OrderContext);
+	const { carrito, eliminarDelCarrito, vaciarCarrito } =
+		useContext(OrderContext);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 
 	const toggleDrawer = (open) => () => {
@@ -41,9 +43,36 @@ export const Carrito = () => {
 					role="presentation"
 					onClick={toggleDrawer(false)}
 				>
-					<Typography variant="h6" align="center" sx={{ p: 1 }}>
-						Mi Carrito
-					</Typography>
+					<Box
+						sx={{
+							display: "flex",
+							justifyContent: "space-between",
+							padding: "8px 16px 0px 16px",
+							alignItems: "center",
+						}}
+					>
+						<Box sx={{ display: "flex", alignItems: "center" }}>
+							<Typography variant="h6" align="center">
+								Mi Carrito
+							</Typography>
+							{carrito.length > 0 && (
+								<Typography
+									variant="body2"
+									component="span"
+									sx={{
+										fontSize: "0.875rem",
+										marginLeft: "4px",
+									}}
+								>
+									({carrito.length}{" "}
+									{carrito.length === 1 ? "producto" : "productos"})
+								</Typography>
+							)}
+						</Box>
+						<IconButton edge="end" aria-label="delete" onClick={vaciarCarrito}>
+							<MdDelete />
+						</IconButton>
+					</Box>
 					<Box
 						sx={{
 							flex: 1,
@@ -57,8 +86,12 @@ export const Carrito = () => {
 									<React.Fragment key={producto.id}>
 										<ListItem
 											secondaryAction={
-												<IconButton edge="end" aria-label="delete">
-													<MdDelete />
+												<IconButton
+													edge="end"
+													aria-label="delete"
+													onClick={() => eliminarDelCarrito(producto.id)}
+												>
+													<TiDelete />
 												</IconButton>
 											}
 										>

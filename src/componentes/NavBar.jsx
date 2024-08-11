@@ -25,7 +25,8 @@ const pages = ["Productos", "Ordenes"];
 
 export function NavBar() {
 	const { usuario } = useContext(UserContext);
-	const { vaciarCarrito } = useContext(OrderContext);
+	const { setCarrito } = useContext(OrderContext);
+
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const navigate = useNavigate();
@@ -49,8 +50,8 @@ export function NavBar() {
 		const auth = getAuth();
 		signOut(auth)
 			.then(() => {
-				vaciarCarrito();
 				navigate("/login");
+				setCarrito([]);
 			})
 			.catch((error) => {
 				console.log(error);

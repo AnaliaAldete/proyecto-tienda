@@ -5,7 +5,7 @@ import {
 	doc,
 	updateDoc,
 	arrayUnion,
-	getDoc,
+	arrayRemove,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { UserContext } from "./UserContext";
@@ -70,12 +70,39 @@ export const OrderProvider = ({ children }) => {
 		}
 	};
 
-	const eliminarDelCarrito = (productoId) => {
+	const eliminarDelCarrito = async (productoId) => {
+		const productoAEliminar = carrito.find(
+			(producto) => producto.id === productoId
+		);
+
 		setCarrito((prev) => prev.filter((producto) => producto.id !== productoId));
+
+		try {
+			const userRef = doc(db, "usuarios", usuario.id);
+			await updateDoc(userRef, {
+				carrito: arrayRemove(productoAEliminar),
+			});
+		} catch (error) {
+			console.error(
+				"Error al eliminar el producto del carrito en Firebase:",
+				error
+			);
+		}
 	};
 
-	const vaciarCarrito = () => {
-		setCarrito([]);
+	const vaciarCarrito = async () => {
+		try {
+			if (usuario) {
+				const userRef = doc(db, "usuarios", usuario.id);
+
+				await updateDoc(userRef, {
+					carrito: [],
+				});
+				setCarrito([]);
+			}
+		} catch (error) {
+			console.error("Error al vaciar el carrito en Firebase:", error);
+		}
 	};
 
 	return (
@@ -86,6 +113,7 @@ export const OrderProvider = ({ children }) => {
 				agregarAlCarrito,
 				eliminarDelCarrito,
 				vaciarCarrito,
+				setCarrito,
 			}}
 		>
 			{children}
