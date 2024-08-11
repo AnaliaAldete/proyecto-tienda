@@ -1,6 +1,9 @@
 import React from "react";
 import { useContext } from "react";
 import { OrderContext } from "../context/OrderContext";
+import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+
 import {
 	Card,
 	CardContent,
@@ -37,9 +40,19 @@ export const CardProducto = ({
 }) => {
 	const [expanded, setExpanded] = React.useState(false);
 	const { agregarAlCarrito } = useContext(OrderContext);
+	const { usuario } = useContext(UserContext);
+	const navigate = useNavigate();
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
+	};
+
+	const handleAgregarAlCarrito = () => {
+		if (!usuario) {
+			navigate("/login");
+		} else {
+			agregarAlCarrito({ nombre, precio, id, imagen });
+		}
 	};
 	return (
 		<Card
@@ -74,7 +87,7 @@ export const CardProducto = ({
 				<Button
 					variant="contained"
 					size="small"
-					onClick={() => agregarAlCarrito({ nombre, precio, id, imagen })}
+					onClick={handleAgregarAlCarrito}
 				>
 					Agregar al carrito
 				</Button>
