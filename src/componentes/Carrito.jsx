@@ -10,19 +10,32 @@ import {
 	ListItemText,
 	Avatar,
 	Divider,
+	Button,
 } from "@mui/material";
 import { FaShoppingCart } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { IoIosClose } from "react-icons/io";
 import { OrderContext } from "../context/OrderContext";
+import { useNavigate } from "react-router-dom";
 
 export const Carrito = () => {
 	const { carrito, eliminarDelCarrito, vaciarCarrito } =
 		useContext(OrderContext);
 	const [drawerOpen, setDrawerOpen] = useState(false);
+	const navigate = useNavigate();
 
 	const toggleDrawer = (open) => () => {
 		setDrawerOpen(open);
+	};
+
+	const handleClickDrawer = (event) => {
+		event.stopPropagation();
+	};
+
+	const finalizarCompra = () => {
+		setDrawerOpen(false);
+		navigate("/");
 	};
 
 	return (
@@ -32,7 +45,14 @@ export const Carrito = () => {
 					<FaShoppingCart size={24} />
 				</Badge>
 			</IconButton>
-			<Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+			<Drawer
+				anchor="right"
+				open={drawerOpen}
+				onClose={toggleDrawer(false)}
+				PaperProps={{
+					onClick: (event) => event.stopPropagation(),
+				}}
+			>
 				<Box
 					sx={{
 						width: 300,
@@ -41,48 +61,56 @@ export const Carrito = () => {
 						height: "100%",
 					}}
 					role="presentation"
-					onClick={toggleDrawer(false)}
+					onClick={handleClickDrawer}
 				>
 					<Box
 						sx={{
 							display: "flex",
 							justifyContent: "space-between",
-							padding: "8px 16px 0px 16px",
+							padding: "8px 0px 8px 16px",
 							alignItems: "center",
 						}}
 					>
-						<Box sx={{ display: "flex", alignItems: "center" }}>
-							<Typography variant="h6" align="center">
+						<Box sx={{ display: "flex" }}>
+							<Typography
+								variant="h6"
+								align="center"
+								sx={{ display: "flex", alignItems: "center" }}
+							>
 								Mi Carrito
+								{carrito.length > 0 && (
+									<Typography
+										variant="body2"
+										component="span"
+										sx={{
+											fontSize: "0.875rem",
+											marginLeft: "4px",
+										}}
+									>
+										({carrito.length}{" "}
+										{carrito.length === 1 ? "producto" : "productos"})
+									</Typography>
+								)}
 							</Typography>
-							{carrito.length > 0 && (
-								<Typography
-									variant="body2"
-									component="span"
-									sx={{
-										fontSize: "0.875rem",
-										marginLeft: "4px",
-									}}
+							{carrito.length > 1 && (
+								<IconButton
+									edge="end"
+									aria-label="delete"
+									onClick={vaciarCarrito}
 								>
-									({carrito.length}{" "}
-									{carrito.length === 1 ? "producto" : "productos"})
-								</Typography>
+									<RiDeleteBin5Line />
+								</IconButton>
 							)}
 						</Box>
-						<IconButton edge="end" aria-label="delete" onClick={vaciarCarrito}>
-							<MdDelete />
+						<IconButton onClick={toggleDrawer(false)}>
+							<IoIosClose />
 						</IconButton>
 					</Box>
-					<Box
-						sx={{
-							flex: 1,
-							display: "flex",
-							flexDirection: "column",
-						}}
-					>
-						{carrito.length > 0 ? (
-							<List>
-								{carrito.map((producto, index) => (
+					<Divider aria-hidden="true" />
+					{carrito.length > 0 ? (
+						<>
+							<List sx={{ padding: 0 }}>
+								{carrito.map((producto) => (
 									<React.Fragment key={producto.id}>
 										<ListItem
 											secondaryAction={
@@ -105,27 +133,51 @@ export const Carrito = () => {
 												secondary={`Cantidad: ${producto.cantidad} - Precio: $${producto.precio}`}
 											/>
 										</ListItem>
-										{index < carrito.length - 1 && (
-											<Divider variant="inset" component="li" />
-										)}
+										<Divider component="li" aria-hidden="true" />
 									</React.Fragment>
 								))}
 							</List>
-						) : (
-							<Box
-								sx={{
-									display: "flex",
-									flex: 1,
-									justifyContent: "center",
-									alignItems: "center",
-								}}
-							>
-								<Typography variant="body1" sx={{ p: 2 }}>
-									El carrito está vacío
+							<Box sx={{ padding: "16px" }}>
+								<Typography
+									variant="h6"
+									sx={{ display: "flex", justifyContent: "space-between" }}
+								>
+									Total:
+									<span>
+										$
+										{carrito.reduce(
+											(total, producto) => total + producto.precio,
+											0
+										)}
+									</span>
 								</Typography>
 							</Box>
-						)}
-					</Box>
+							<Divider aria-hidden="true" />
+							<Button
+								variant="contained"
+								sx={{
+									alignSelf: "center",
+									marginTop: "16px",
+								}}
+								onClick={finalizarCompra}
+							>
+								Finalizar compra
+							</Button>
+						</>
+					) : (
+						<Box
+							sx={{
+								display: "flex",
+								flex: 1,
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
+							<Typography variant="body1" sx={{ p: 2 }}>
+								El carrito está vacío
+							</Typography>
+						</Box>
+					)}
 				</Box>
 			</Drawer>
 		</>
