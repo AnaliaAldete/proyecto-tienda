@@ -7,10 +7,10 @@ import {
 	Typography,
 	List,
 	ListItem,
-	ListItemText,
 	Avatar,
 	Divider,
 	Button,
+	ButtonGroup,
 } from "@mui/material";
 import { FaShoppingCart } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
@@ -20,7 +20,7 @@ import { OrderContext } from "../context/OrderContext";
 import { useNavigate } from "react-router-dom";
 
 export const Carrito = () => {
-	const { carrito, eliminarDelCarrito, vaciarCarrito } =
+	const { carrito, eliminarDelCarrito, vaciarCarrito, actualizarCantidad } =
 		useContext(OrderContext);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const navigate = useNavigate();
@@ -128,15 +128,53 @@ export const Carrito = () => {
 												alt={producto.nombre}
 												sx={{ width: 56, height: 56, mr: 2 }}
 											/>
-											<ListItemText
-												primary={producto.nombre}
-												secondary={`Cantidad: ${producto.cantidad} - Precio: $${producto.precio}`}
-											/>
+											<Box
+												sx={{
+													display: "flex",
+													flexDirection: "column",
+													gap: 1,
+												}}
+											>
+												<Typography variant="body1" component="div">
+													{producto.nombre}
+												</Typography>
+
+												<ButtonGroup
+													size="small"
+													aria-label="small outlined button group"
+												>
+													<Button
+														onClick={() => actualizarCantidad(producto.id, -1)}
+													>
+														-
+													</Button>
+													<Button
+														disableElevation
+														sx={{
+															cursor: "default",
+															"&:hover": {
+																cursor: "default",
+															},
+														}}
+													>
+														{producto.cantidad || 1}
+													</Button>
+													<Button
+														onClick={() => actualizarCantidad(producto.id, 1)}
+													>
+														+
+													</Button>
+												</ButtonGroup>
+												<Typography variant="body2" component="span">
+													Precio: ${producto.precio}
+												</Typography>
+											</Box>
 										</ListItem>
 										<Divider component="li" aria-hidden="true" />
 									</React.Fragment>
 								))}
 							</List>
+
 							<Box sx={{ padding: "16px" }}>
 								<Typography
 									variant="h6"
@@ -146,7 +184,8 @@ export const Carrito = () => {
 									<span>
 										$
 										{carrito.reduce(
-											(total, producto) => total + producto.precio,
+											(total, producto) =>
+												total + producto.precio * (producto.cantidad || 1),
 											0
 										)}
 									</span>

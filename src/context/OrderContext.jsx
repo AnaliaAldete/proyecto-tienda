@@ -1,12 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import {
-	collection,
-	onSnapshot,
-	doc,
-	updateDoc,
-	arrayUnion,
-	arrayRemove,
-} from "firebase/firestore";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { UserContext } from "./UserContext";
 
@@ -20,81 +13,78 @@ export const OrderProvider = ({ children }) => {
 	//GET PRODUCTOS
 	useEffect(() => {
 		const collectionReference = collection(db, "productos");
-		onSnapshot(collectionReference, (data) => {
-			const NewProductosArray = data?.docs?.map((producto) => {
-				return { ...producto.data(), id: producto.id };
-			});
+		const unsubscribe = onSnapshot(collectionReference, (data) => {
+			const NewProductosArray = data?.docs?.map((producto) => ({
+				...producto.data(),
+				id: producto.id,
+			}));
 			setProductosArray(NewProductosArray);
 		});
+		return () => unsubscribe();
 	}, []);
 
 	//GET CARRITO
 	useEffect(() => {
 		if (usuario) {
 			const userRef = doc(db, "usuarios", usuario.id);
-			const handleCarrito = onSnapshot(
-				userRef,
-				(doc) => {
-					if (doc.exists()) {
-						setCarrito(doc.data().carrito || []);
-					}
-				},
-				(error) => {
-					console.error("Error al escuchar los cambios en el carrito:", error);
-				}
-			);
-			return () => handleCarrito();
+			const unsubscribe = onSnapshot(userRef, (doc) => {
+				const carritoFirebase = doc.data()?.carrito || [];
+				setCarrito(carritoFirebase);
+			});
+			return () => unsubscribe();
+		} else {
+			setCarrito([]);
 		}
 	}, [usuario]);
 
-	const agregarAlCarrito = async (producto) => {
+	// Sincronizar carrito con Firebase
+	useEffect(() => {
+		const sincronizarFirebase = async () => {
+			if (usuario) {
+				const userRef = doc(db, "usuarios", usuario.id);
+				try {
+					await updateDoc(userRef, { carrito });
+				} catch (error) {
+					console.error("Error al sincronizar el carrito con Firebase:", error);
+				}
+			}
+		};
+
+		if (usuario && carrito.length > 0) {
+			sincronizarFirebase();
+		}
+	}, [carrito, usuario]);
+
+	const agregarAlCarrito = (producto) => {
 		setCarrito((prevCarrito) => {
-			const productoExistente = prevCarrito.some(
+			const productoExistente = prevCarrito.find(
 				(item) => item.id === producto.id
 			);
 			if (productoExistente) {
 				return prevCarrito;
 			}
-			return [...prevCarrito, producto];
+			return [...prevCarrito, { ...producto, cantidad: 1 }];
 		});
-		try {
-			const userRef = doc(db, "usuarios", usuario.id);
-			await updateDoc(userRef, {
-				carrito: arrayUnion(producto),
-			});
-		} catch (error) {
-			console.error(
-				"Error al agregar el producto al carrito en Firebase:",
-				error
-			);
-		}
 	};
 
-	const eliminarDelCarrito = async (productoId) => {
-		const productoAEliminar = carrito.find(
-			(producto) => producto.id === productoId
+	const actualizarCantidad = (productoId, cambio) => {
+		setCarrito((prevCarrito) =>
+			prevCarrito.map((producto) =>
+				producto.id === productoId
+					? { ...producto, cantidad: (producto.cantidad || 1) + cambio }
+					: producto
+			)
 		);
+	};
 
+	const eliminarDelCarrito = (productoId) => {
 		setCarrito((prev) => prev.filter((producto) => producto.id !== productoId));
-
-		try {
-			const userRef = doc(db, "usuarios", usuario.id);
-			await updateDoc(userRef, {
-				carrito: arrayRemove(productoAEliminar),
-			});
-		} catch (error) {
-			console.error(
-				"Error al eliminar el producto del carrito en Firebase:",
-				error
-			);
-		}
 	};
 
 	const vaciarCarrito = async () => {
 		try {
 			if (usuario) {
 				const userRef = doc(db, "usuarios", usuario.id);
-
 				await updateDoc(userRef, {
 					carrito: [],
 				});
@@ -114,6 +104,7 @@ export const OrderProvider = ({ children }) => {
 				eliminarDelCarrito,
 				vaciarCarrito,
 				setCarrito,
+				actualizarCantidad,
 			}}
 		>
 			{children}

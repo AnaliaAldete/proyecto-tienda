@@ -13,7 +13,6 @@ import {
 import { pink } from "@mui/material/colors";
 import { useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { OrderContext } from "../context/OrderContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Carrito } from "../componentes/Carrito";
 import logo from "../assets/logo.png";
@@ -25,7 +24,6 @@ const pages = ["Productos", "Ordenes"];
 
 export function NavBar() {
 	const { usuario } = useContext(UserContext);
-	const { setCarrito } = useContext(OrderContext);
 
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
@@ -51,7 +49,6 @@ export function NavBar() {
 		signOut(auth)
 			.then(() => {
 				navigate("/login");
-				setCarrito([]);
 			})
 			.catch((error) => {
 				console.log(error);
