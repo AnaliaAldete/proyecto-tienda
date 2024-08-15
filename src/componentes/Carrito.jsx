@@ -58,7 +58,6 @@ export const Carrito = () => {
 						width: 300,
 						display: "flex",
 						flexDirection: "column",
-						height: "100%",
 					}}
 					role="presentation"
 					onClick={handleClickDrawer}
@@ -196,7 +195,7 @@ export const Carrito = () => {
 								variant="contained"
 								sx={{
 									alignSelf: "center",
-									marginTop: "16px",
+									marginBlock: "16px",
 								}}
 								onClick={finalizarCompra}
 							>

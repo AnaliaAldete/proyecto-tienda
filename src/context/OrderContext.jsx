@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { UserContext } from "./UserContext";
+import { Snackbar, Alert } from "@mui/material";
 
 export const OrderContext = createContext(null);
 
@@ -9,6 +10,15 @@ export const OrderProvider = ({ children }) => {
 	const { usuario } = useContext(UserContext);
 	const [productosArray, setProductosArray] = useState([]);
 	const [carrito, setCarrito] = useState([]);
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
+
+	const handleCloseSnackbar = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+		setOpenSnackbar(false);
+	};
 
 	//GET PRODUCTOS
 	useEffect(() => {
@@ -61,8 +71,12 @@ export const OrderProvider = ({ children }) => {
 				(item) => item.id === producto.id
 			);
 			if (productoExistente) {
+				setSnackbarMessage("El producto ya está en el carrito");
+				setOpenSnackbar(true);
 				return prevCarrito;
 			}
+			setSnackbarMessage("Producto cargado con éxito");
+			setOpenSnackbar(true);
 			return [...prevCarrito, { ...producto, cantidad: 1 }];
 		});
 	};
@@ -71,7 +85,7 @@ export const OrderProvider = ({ children }) => {
 		setCarrito((prevCarrito) =>
 			prevCarrito.map((producto) =>
 				producto.id === productoId
-					? { ...producto, cantidad: (producto.cantidad || 1) + cambio }
+					? { ...producto, cantidad: producto.cantidad + cambio }
 					: producto
 			)
 		);
@@ -108,6 +122,21 @@ export const OrderProvider = ({ children }) => {
 			}}
 		>
 			{children}
+			<Snackbar
+				open={openSnackbar}
+				autoHideDuration={3000}
+				onClose={handleCloseSnackbar}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+			>
+				<Alert
+					onClose={handleCloseSnackbar}
+					severity="success"
+					variant="filled"
+					sx={{ width: "100%" }}
+				>
+					{snackbarMessage}
+				</Alert>
+			</Snackbar>
 		</OrderContext.Provider>
 	);
 };
