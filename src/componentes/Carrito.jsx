@@ -41,8 +41,8 @@ export const Carrito = () => {
 	return (
 		<>
 			<IconButton onClick={toggleDrawer(true)}>
-				<Badge color="secondary" badgeContent={carrito.length}>
-					<FaShoppingCart size={24} />
+				<Badge color="success" badgeContent={carrito.length}>
+					<FaShoppingCart size={24} color="white" />
 				</Badge>
 			</IconButton>
 			<Drawer
@@ -137,6 +137,9 @@ export const Carrito = () => {
 												<Typography variant="body1" component="div">
 													{producto.nombre}
 												</Typography>
+												<Typography variant="body2" component="span">
+													${producto.precio}
+												</Typography>
 
 												<ButtonGroup
 													size="small"
@@ -164,9 +167,6 @@ export const Carrito = () => {
 														+
 													</Button>
 												</ButtonGroup>
-												<Typography variant="body2" component="span">
-													Precio: ${producto.precio}
-												</Typography>
 											</Box>
 										</ListItem>
 										<Divider component="li" aria-hidden="true" />

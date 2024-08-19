@@ -57,7 +57,10 @@ export function NavBar() {
 
 	return (
 		<AppBar position="static">
-			<Container maxWidth="xl" sx={{ padding: "8px 24px 8px 24px" }}>
+			<Container
+				maxWidth="xl"
+				sx={{ padding: "8px 24px 8px 24px", backgroundColor: "#0000FF" }}
+			>
 				<Toolbar disableGutters>
 					<Box
 						component="img"
@@ -184,7 +187,14 @@ export function NavBar() {
 
 						<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 							{usuario ? (
-								<Avatar sx={{ width: 35, height: 35, bgcolor: pink[500] }}>
+								<Avatar
+									sx={{
+										width: 35,
+										height: 35,
+										color: "#0000FF",
+										backgroundColor: "white",
+									}}
+								>
 									{usuario.nombre ? usuario.nombre[0].toUpperCase() : "U"}
 								</Avatar>
 							) : (

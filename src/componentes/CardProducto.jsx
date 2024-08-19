@@ -1,7 +1,4 @@
 import React from "react";
-import { useContext } from "react";
-import { OrderContext } from "../context/OrderContext";
-import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -12,101 +9,52 @@ import {
 	CardActions,
 	Button,
 	CardHeader,
-	styled,
-	IconButton,
-	Collapse,
 } from "@mui/material";
 
-import { MdOutlineExpandMore } from "react-icons/md";
-
-const ExpandMore = styled((props) => {
-	const { expand, ...other } = props;
-	return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-	transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-	marginLeft: "auto",
-	transition: theme.transitions.create("transform", {
-		duration: theme.transitions.duration.shortest,
-	}),
-}));
-
-export const CardProducto = ({
-	id,
-	nombre,
-	precio,
-	descripcion,
-	imagen,
-	descripcionLarga,
-}) => {
-	const [expanded, setExpanded] = React.useState(false);
-	const { agregarAlCarrito } = useContext(OrderContext);
-	const { usuario } = useContext(UserContext);
+export const CardProducto = ({ id, nombre, precio, descripcion, imagen }) => {
 	const navigate = useNavigate();
-
-	const handleExpandClick = () => {
-		setExpanded(!expanded);
+	const handleVerDetalle = () => {
+		navigate(`/cardDetalle/${id}`);
 	};
 
-	const handleAgregarAlCarrito = () => {
-		if (!usuario) {
-			navigate("/login");
-		} else {
-			agregarAlCarrito({ nombre, precio, id, imagen });
-		}
-	};
 	return (
 		<Card
 			sx={{
 				maxWidth: 345,
 				borderRadius: 2,
-				border: "2px solid #1976d2",
+				boxShadow: "0px 4px 8px rgb(0 0 0 / 50%)",
 			}}
 		>
-			<CardHeader
-				title={nombre}
-				sx={{
-					textAlign: "center",
-				}}
-			/>
-			<CardMedia component="img" alt={nombre} height="194" image={imagen} />
+			<CardMedia component="img" alt={nombre} height="250" image={imagen} />
 			<CardContent
 				sx={{
 					display: "flex",
 					flexDirection: "column",
-					gap: 2,
+					gap: 1,
+					textAlign: "center",
 				}}
 			>
-				<Typography variant="body2" color="text.secondary">
-					{descripcion}
-				</Typography>
+				<Typography variant="subtitle1">{descripcion}</Typography>
 				<Typography variant="h6" color="text.primary">
-					Precio: ${precio}
+					${precio}
 				</Typography>
 			</CardContent>
-			<CardActions disableSpacing sx={{ paddingTop: 0 }}>
+			<CardActions
+				disableSpacing
+				sx={{
+					paddingTop: 0,
+					justifyContent: "center",
+				}}
+			>
 				<Button
 					variant="contained"
 					size="small"
-					onClick={handleAgregarAlCarrito}
+					sx={{ backgroundColor: "#0000FF" }}
+					onClick={handleVerDetalle}
 				>
-					Agregar al carrito
+					Ver detalle
 				</Button>
-				<ExpandMore
-					expand={expanded}
-					onClick={handleExpandClick}
-					aria-expanded={expanded}
-					aria-label="show more"
-				>
-					<MdOutlineExpandMore />
-				</ExpandMore>
 			</CardActions>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
-				<CardContent style={{ padding: "8px 16px 16px 16px" }}>
-					<Typography paragraph sx={{ marginBottom: 0 }}>
-						{descripcionLarga}
-					</Typography>
-				</CardContent>
-			</Collapse>
 		</Card>
 	);
 };

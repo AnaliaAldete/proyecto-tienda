@@ -6,8 +6,17 @@ import { CardProducto } from "../componentes/CardProducto";
 export const ContainerProductos = () => {
 	const { productosArray } = useContext(OrderContext);
 	return (
-		<Box sx={{ flexGrow: 1, padding: 4 }}>
-			<Grid container spacing={2}>
+		<Box
+			sx={{
+				flexGrow: 1,
+				padding: 4,
+				backgroundColor: "#f5f5f5",
+				display: "flex",
+				justifyContent: "center",
+				minHeight: "80vh",
+			}}
+		>
+			<Grid container spacing={2} sx={{ maxWidth: "1100px" }}>
 				{productosArray.map((producto) => (
 					<Grid
 						item
@@ -22,7 +31,6 @@ export const ContainerProductos = () => {
 							nombre={producto.nombre}
 							precio={producto.precio}
 							descripcion={producto.descripcion}
-							descripcionLarga={producto.descripcionLarga}
 							imagen={producto.imagen}
 							id={producto.id}
 						/>
