@@ -38,7 +38,7 @@ export const CardDetalle = () => {
 			sx={{
 				display: "flex",
 				justifyContent: "center",
-				height: "80vh",
+				minHeight: "80vh",
 			}}
 		>
 			<Card

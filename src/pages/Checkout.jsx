@@ -18,10 +18,12 @@ import {
 	TableHead,
 	TableRow,
 	Paper,
+	useMediaQuery,
+	useTheme,
 } from "@mui/material";
 import { OrderContext } from "../context/OrderContext";
 import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../firebase";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
@@ -30,6 +32,8 @@ export const Checkout = () => {
 	const { usuario } = useContext(UserContext);
 	const [openDialog, setOpenDialog] = useState(false);
 	const navigate = useNavigate();
+	const theme = useTheme();
+	const celu = useMediaQuery(theme.breakpoints.down("sm"));
 
 	const total = carrito.reduce(
 		(total, producto) => total + producto.precio * (producto.cantidad || 1),
@@ -76,35 +80,49 @@ export const Checkout = () => {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell></TableCell>
+								{!celu && <TableCell></TableCell>}
 								<TableCell>Producto</TableCell>
-								<TableCell align="right">Precio</TableCell>
-								<TableCell align="right">Cantidad</TableCell>
+								{!celu && <TableCell align="right">Precio</TableCell>}
+								{!celu && <TableCell align="right">Cantidad</TableCell>}
 								<TableCell align="right">Total</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{carrito.map((producto) => (
 								<TableRow key={producto.id}>
-									<TableCell sx={{ maxWidth: 60 }}>
-										<Avatar
-											src={producto.imagen}
-											alt={producto.nombre}
-											sx={{ width: 56, height: 56 }}
-										/>
-									</TableCell>
+									{!celu && (
+										<TableCell sx={{ maxWidth: 60 }}>
+											<Avatar
+												src={producto.imagen}
+												alt={producto.nombre}
+												sx={{ width: 56, height: 56 }}
+											/>
+										</TableCell>
+									)}
 									<TableCell component="th" scope="row">
 										{producto.nombre}
+										{celu && (
+											<Typography variant="body2" mt={1}>
+												${producto.precio} x {producto.cantidad || 1}
+											</Typography>
+										)}
 									</TableCell>
-									<TableCell align="right">${producto.precio}</TableCell>
-									<TableCell align="right">{producto.cantidad || 1}</TableCell>
+									{!celu && (
+										<TableCell align="right">${producto.precio}</TableCell>
+									)}
+
+									{!celu && (
+										<TableCell align="right">
+											{producto.cantidad || 1}
+										</TableCell>
+									)}
 									<TableCell align="right">
 										${producto.precio * (producto.cantidad || 1)}
 									</TableCell>
 								</TableRow>
 							))}
 							<TableRow>
-								<TableCell colSpan={4} align="right">
+								<TableCell colSpan={celu ? 1 : 4} align="right">
 									<Typography variant="h6">Total:</Typography>
 								</TableCell>
 								<TableCell align="right">
@@ -117,6 +135,7 @@ export const Checkout = () => {
 				<Button variant="contained" color="primary" onClick={confirmarPedido}>
 					Confirmar pedido
 				</Button>
+				<Link to="/productos">Seguir comprando</Link>
 			</Box>
 			<Dialog
 				open={openDialog}
