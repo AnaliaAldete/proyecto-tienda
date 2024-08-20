@@ -55,7 +55,7 @@ export function NavBar() {
 	};
 
 	return (
-		<AppBar position="static" sx={{ backgroundColor: "#0000FF" }}>
+		<AppBar position="sticky" sx={{ backgroundColor: "#0000FF" }}>
 			<Container maxWidth="xl" sx={{ padding: "8px 24px 8px 24px" }}>
 				<Toolbar disableGutters>
 					<Box

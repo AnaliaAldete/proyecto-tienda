@@ -20,6 +20,7 @@ import {
 	Paper,
 	useMediaQuery,
 	useTheme,
+	Snackbar,
 } from "@mui/material";
 import { OrderContext } from "../context/OrderContext";
 import { UserContext } from "../context/UserContext";
@@ -31,12 +32,13 @@ export const Checkout = () => {
 	const { carrito, vaciarCarrito } = useContext(OrderContext);
 	const { usuario } = useContext(UserContext);
 	const [openDialog, setOpenDialog] = useState(false);
+	const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const celu = useMediaQuery(theme.breakpoints.down("sm"));
 
 	const total = carrito.reduce(
-		(total, producto) => total + producto.precio * (producto.cantidad || 1),
+		(total, producto) => total + producto.precio * producto.cantidad,
 		0
 	);
 
@@ -56,7 +58,7 @@ export const Checkout = () => {
 				vaciarCarrito();
 				setOpenDialog(true);
 			} catch (error) {
-				console.error("Error al confirmar el pedido:", error);
+				setOpenErrorSnackbar(true);
 			}
 		}
 	};
@@ -64,6 +66,9 @@ export const Checkout = () => {
 	const handleCloseDialog = () => {
 		setOpenDialog(false);
 		navigate("/");
+	};
+	const handleCloseErrorSnackbar = () => {
+		setOpenErrorSnackbar(false);
 	};
 
 	return (
@@ -103,7 +108,7 @@ export const Checkout = () => {
 										{producto.nombre}
 										{celu && (
 											<Typography variant="body2" mt={1}>
-												${producto.precio} x {producto.cantidad || 1}
+												${producto.precio} x {producto.cantidad}
 											</Typography>
 										)}
 									</TableCell>
@@ -112,12 +117,10 @@ export const Checkout = () => {
 									)}
 
 									{!celu && (
-										<TableCell align="right">
-											{producto.cantidad || 1}
-										</TableCell>
+										<TableCell align="right">{producto.cantidad}</TableCell>
 									)}
 									<TableCell align="right">
-										${producto.precio * (producto.cantidad || 1)}
+										${producto.precio * producto.cantidad}
 									</TableCell>
 								</TableRow>
 							))}
@@ -169,6 +172,12 @@ export const Checkout = () => {
 					</Button>
 				</DialogActions>
 			</Dialog>
+			<Snackbar
+				open={openErrorSnackbar}
+				autoHideDuration={6000}
+				onClose={handleCloseErrorSnackbar}
+				message="Error al confirmar el pedido. Inténtalo de nuevo."
+			/>
 		</Container>
 	);
 };

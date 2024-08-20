@@ -159,7 +159,7 @@ export const Carrito = () => {
 															},
 														}}
 													>
-														{producto.cantidad || 1}
+														{producto.cantidad}
 													</Button>
 													<Button
 														onClick={() => actualizarCantidad(producto.id, 1)}
@@ -184,7 +184,7 @@ export const Carrito = () => {
 										$
 										{carrito.reduce(
 											(total, producto) =>
-												total + producto.precio * (producto.cantidad || 1),
+												total + producto.precio * producto.cantidad,
 											0
 										)}
 									</span>
