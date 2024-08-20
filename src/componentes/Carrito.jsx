@@ -35,7 +35,7 @@ export const Carrito = () => {
 
 	const finalizarCompra = () => {
 		setDrawerOpen(false);
-		navigate("/");
+		navigate("/checkout");
 	};
 
 	return (

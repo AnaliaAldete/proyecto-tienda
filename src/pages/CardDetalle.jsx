@@ -61,7 +61,7 @@ export const CardDetalle = () => {
 					<Grid item xs={12} sm={6}>
 						<CardMedia
 							component="img"
-							//alt={producto.nombre}
+							alt={producto.nombre}
 							image={producto.imagen}
 							sx={{ height: "100%", objectFit: "cover" }}
 						/>

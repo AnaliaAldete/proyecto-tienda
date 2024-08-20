@@ -10,7 +10,6 @@ import {
 	MenuItem,
 	Avatar,
 } from "@mui/material";
-import { pink } from "@mui/material/colors";
 import { useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -56,11 +55,8 @@ export function NavBar() {
 	};
 
 	return (
-		<AppBar position="static">
-			<Container
-				maxWidth="xl"
-				sx={{ padding: "8px 24px 8px 24px", backgroundColor: "#0000FF" }}
-			>
+		<AppBar position="static" sx={{ backgroundColor: "#0000FF" }}>
+			<Container maxWidth="xl" sx={{ padding: "8px 24px 8px 24px" }}>
 				<Toolbar disableGutters>
 					<Box
 						component="img"

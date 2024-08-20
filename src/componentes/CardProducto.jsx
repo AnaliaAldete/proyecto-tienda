@@ -8,7 +8,6 @@ import {
 	Typography,
 	CardActions,
 	Button,
-	CardHeader,
 } from "@mui/material";
 
 export const CardProducto = ({ id, nombre, precio, descripcion, imagen }) => {
