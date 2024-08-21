@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
 	Box,
 	Typography,
@@ -26,7 +26,7 @@ import { OrderContext } from "../context/OrderContext";
 import { UserContext } from "../context/UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../firebase";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 export const Checkout = () => {
 	const { carrito, vaciarCarrito } = useContext(OrderContext);
@@ -36,6 +36,12 @@ export const Checkout = () => {
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const celu = useMediaQuery(theme.breakpoints.down("sm"));
+
+	useEffect(() => {
+		if (!usuario) {
+			navigate("/login");
+		}
+	}, [usuario]);
 
 	const total = carrito.reduce(
 		(total, producto) => total + producto.precio * producto.cantidad,

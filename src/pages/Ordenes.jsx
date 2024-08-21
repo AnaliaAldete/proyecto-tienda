@@ -15,10 +15,12 @@ import {
 import { UserContext } from "../context/UserContext";
 import { db } from "../../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 export const Ordenes = () => {
 	const { usuario } = useContext(UserContext);
 	const [ordenes, setOrdenes] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (usuario) {
@@ -28,6 +30,8 @@ export const Ordenes = () => {
 				setOrdenes(userData?.ordenes || []);
 			});
 			return () => unsubscribe();
+		} else {
+			navigate("/login");
 		}
 	}, [usuario]);
 

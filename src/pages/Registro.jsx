@@ -64,6 +64,7 @@ export const Registro = () => {
 							label="Nombre de Usuario"
 							variant="outlined"
 							fullWidth
+							autoComplete="name"
 							{...register("nombre", {
 								required: "El nombre de usuario es requerido",
 							})}
@@ -78,6 +79,7 @@ export const Registro = () => {
 							name="email"
 							variant="outlined"
 							fullWidth
+							autoComplete="email"
 							{...register("email", {
 								required: "El correo electrónico es requerido",
 								pattern: {
@@ -97,6 +99,7 @@ export const Registro = () => {
 							type="password"
 							variant="outlined"
 							fullWidth
+							autoComplete="new-password"
 							{...register("contraseña", {
 								required: "La contraseña es requerida",
 								minLength: {

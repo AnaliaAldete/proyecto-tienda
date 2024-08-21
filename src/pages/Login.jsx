@@ -48,6 +48,7 @@ export const Login = () => {
 							variant="outlined"
 							margin="normal"
 							fullWidth
+							autoComplete="email"
 							{...register("email", {
 								required: "El email es obligatorio",
 								pattern: {
@@ -57,9 +58,6 @@ export const Login = () => {
 							})}
 							error={!!errors.email}
 							helperText={errors.email ? errors.email.message : ""}
-							InputProps={{
-								autoComplete: "email",
-							}}
 						/>
 					</Box>
 					<Box sx={{ mb: 2 }}>
@@ -69,6 +67,7 @@ export const Login = () => {
 							variant="outlined"
 							margin="normal"
 							fullWidth
+							autoComplete="current-password"
 							{...register("contraseña", {
 								required: "La contraseña es obligatoria",
 								minLength: {
@@ -78,9 +77,6 @@ export const Login = () => {
 							})}
 							error={!!errors.contraseña}
 							helperText={errors.contraseña ? errors.contraseña.message : ""}
-							InputProps={{
-								autoComplete: "current-password",
-							}}
 						/>
 					</Box>
 					<Button
