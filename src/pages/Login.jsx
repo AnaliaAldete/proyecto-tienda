@@ -8,9 +8,12 @@ import {
 	Box,
 	Container,
 	Alert,
+	IconButton,
+	InputAdornment,
 } from "@mui/material";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 export const Login = () => {
 	const {
@@ -22,6 +25,10 @@ export const Login = () => {
 	const navigate = useNavigate();
 
 	const [errorMessage, setErrorMessage] = useState(null);
+	const [showPassword, setShowPassword] = useState(false);
+
+	const handleClickShowPassword = () => setShowPassword(!showPassword);
+	const handleMouseDownPassword = (event) => event.preventDefault();
 
 	const onSubmit = (data) => {
 		const auth = getAuth();
@@ -82,7 +89,7 @@ export const Login = () => {
 				<Box sx={{ mb: 2 }}>
 					<TextField
 						label="Contraseña"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						variant="outlined"
 						margin="normal"
 						fullWidth
@@ -96,6 +103,20 @@ export const Login = () => {
 						})}
 						error={!!errors.contraseña}
 						helperText={errors.contraseña ? errors.contraseña.message : ""}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge="end"
+									>
+										{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
 				</Box>
 				{errorMessage && (

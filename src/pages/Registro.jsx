@@ -1,10 +1,21 @@
 import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button, Typography, Container, Box } from "@mui/material";
+import {
+	TextField,
+	Button,
+	Typography,
+	Container,
+	Box,
+	Alert,
+	IconButton,
+	InputAdornment,
+} from "@mui/material";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 export const Registro = () => {
 	const {
@@ -14,6 +25,11 @@ export const Registro = () => {
 	} = useForm();
 
 	const navigate = useNavigate();
+	const [errorMessage, setErrorMessage] = useState(null);
+	const [showPassword, setShowPassword] = useState(false);
+
+	const handleClickShowPassword = () => setShowPassword(!showPassword);
+	const handleMouseDownPassword = (event) => event.preventDefault();
 
 	const onSubmit = (data) => {
 		const auth = getAuth();
@@ -21,8 +37,9 @@ export const Registro = () => {
 		const registroNuevoUsuario = async (nuevoUsuario) => {
 			try {
 				await setDoc(doc(db, "usuarios", nuevoUsuario.id), nuevoUsuario);
+				navigate("/");
 			} catch (err) {
-				console.log(err);
+				setErrorMessage("Ocurrió un error inesperado. Inténtalo nuevamente.");
 			}
 		};
 		createUserWithEmailAndPassword(auth, data.email, data.contraseña)
@@ -35,12 +52,17 @@ export const Registro = () => {
 					id: userCredential.user.uid,
 				};
 				registroNuevoUsuario(usuario);
-				navigate("/");
 			})
 			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.error(`Error ${errorCode}: ${errorMessage}`);
+				let message;
+				if (error.code === "auth/email-already-in-use") {
+					message = "El email ya está registrado. Por favor, inicia sesión.";
+				} else if (error.code === "auth/too-many-requests") {
+					message = "El registro de usuarios está deshabilitado.";
+				} else {
+					message = "Ocurrió un error inesperado. Inténtalo nuevamente.";
+				}
+				setErrorMessage(message);
 			});
 	};
 
@@ -60,12 +82,13 @@ export const Registro = () => {
 				Formulario de Registro
 			</Typography>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate>
-				<Box sx={{ mb: 2 }}>
+				<Box>
 					<TextField
 						label="Nombre de Usuario"
 						variant="outlined"
 						fullWidth
 						autoComplete="name"
+						margin="normal"
 						{...register("nombre", {
 							required: "El nombre de usuario es requerido",
 						})}
@@ -74,13 +97,14 @@ export const Registro = () => {
 					/>
 				</Box>
 
-				<Box sx={{ mb: 2 }}>
+				<Box>
 					<TextField
 						label="Correo Electrónico"
 						name="email"
 						variant="outlined"
 						fullWidth
 						autoComplete="email"
+						margin="normal"
 						{...register("email", {
 							required: "El correo electrónico es requerido",
 							pattern: {
@@ -93,14 +117,15 @@ export const Registro = () => {
 					/>
 				</Box>
 
-				<Box sx={{ mb: 3 }}>
+				<Box sx={{ mb: 2 }}>
 					<TextField
 						label="Contraseña"
 						name="contraseña"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						variant="outlined"
 						fullWidth
 						autoComplete="new-password"
+						margin="normal"
 						{...register("contraseña", {
 							required: "La contraseña es requerida",
 							minLength: {
@@ -110,8 +135,27 @@ export const Registro = () => {
 						})}
 						error={!!errors.contraseña}
 						helperText={errors.contraseña ? errors.contraseña.message : ""}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge="end"
+									>
+										{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
 				</Box>
+				{errorMessage && (
+					<Alert severity="error" sx={{ mb: 2 }}>
+						{errorMessage}
+					</Alert>
+				)}
 
 				<Button type="submit" variant="contained" color="primary">
 					Registrarse
