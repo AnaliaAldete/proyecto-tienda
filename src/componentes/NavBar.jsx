@@ -15,9 +15,9 @@ import { UserContext } from "../context/UserContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Carrito } from "../componentes/Carrito";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+
 import { getAuth, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const pages = ["Productos", "Ordenes"];
 
