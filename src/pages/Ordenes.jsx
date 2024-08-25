@@ -1,5 +1,4 @@
-import React from "react";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	Container,
 	Box,
@@ -16,24 +15,32 @@ import { UserContext } from "../context/UserContext";
 import { db } from "../../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "../componentes/Spinner";
 
 export const Ordenes = () => {
-	const { usuario } = useContext(UserContext);
+	const { usuario, loading } = useContext(UserContext);
 	const [ordenes, setOrdenes] = useState([]);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (usuario) {
+		if (!loading) {
+			if (!usuario) {
+				navigate("/login");
+				return;
+			}
+
 			const userRef = doc(db, "usuarios", usuario.id);
 			const unsubscribe = onSnapshot(userRef, (doc) => {
 				const userData = doc.data();
 				setOrdenes(userData?.ordenes || []);
 			});
 			return () => unsubscribe();
-		} else {
-			navigate("/login");
 		}
-	}, [usuario]);
+	}, [usuario, loading, navigate]);
+
+	if (loading) {
+		return <Spinner />;
+	}
 
 	return (
 		<Container maxWidth="md" sx={{ minHeight: "80vh", padding: 4 }}>

@@ -27,10 +27,11 @@ import { UserContext } from "../context/UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
+import { Spinner } from "../componentes/Spinner";
 
 export const Checkout = () => {
 	const { carrito, vaciarCarrito } = useContext(OrderContext);
-	const { usuario } = useContext(UserContext);
+	const { usuario, loading } = useContext(UserContext);
 	const [openDialog, setOpenDialog] = useState(false);
 	const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 	const navigate = useNavigate();
@@ -38,10 +39,10 @@ export const Checkout = () => {
 	const celu = useMediaQuery(theme.breakpoints.down("sm"));
 
 	useEffect(() => {
-		if (!usuario) {
+		if (!loading && !usuario) {
 			navigate("/login");
 		}
-	}, [usuario]);
+	}, [usuario, navigate, loading]);
 
 	const total = carrito.reduce(
 		(total, producto) => total + producto.precio * producto.cantidad,
@@ -76,7 +77,9 @@ export const Checkout = () => {
 	const handleCloseErrorSnackbar = () => {
 		setOpenErrorSnackbar(false);
 	};
-
+	if (loading) {
+		return <Spinner />;
+	}
 	return (
 		<Container maxWidth="md" sx={{ minHeight: "80vh" }}>
 			<Box

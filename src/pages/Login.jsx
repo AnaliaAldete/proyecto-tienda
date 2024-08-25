@@ -1,21 +1,16 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
-import {
-	TextField,
-	Button,
-	Typography,
-	Box,
-	Container,
-	Alert,
-	IconButton,
-	InputAdornment,
-} from "@mui/material";
+import { useRedireccion } from "../hooks/useRedireccion";
+import { UserContext } from "../context/UserContext";
+import { Button, Typography, Box, Container, Alert } from "@mui/material";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { Spinner } from "../componentes/Spinner";
+import { Input } from "../componentes/Input";
 
 export const Login = () => {
+	useRedireccion();
 	const {
 		register,
 		handleSubmit,
@@ -26,15 +21,12 @@ export const Login = () => {
 
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [showPassword, setShowPassword] = useState(false);
-
-	const handleClickShowPassword = () => setShowPassword(!showPassword);
-	const handleMouseDownPassword = (event) => event.preventDefault();
+	const { loading } = useContext(UserContext);
 
 	const onSubmit = (data) => {
 		const auth = getAuth();
 		signInWithEmailAndPassword(auth, data.email, data.contraseña)
-			.then((userCredential) => {
-				const user = userCredential.user;
+			.then(() => {
 				navigate("/");
 			})
 			.catch((error) => {
@@ -51,91 +43,70 @@ export const Login = () => {
 				setErrorMessage(message);
 			});
 	};
+	if (loading) {
+		return <Spinner />;
+	}
 
 	return (
-		<Container
-			maxWidth="sm"
-			sx={{
-				mt: 4,
-				p: 3,
-				border: "1px solid #ccc",
-				borderRadius: "8px",
-				backgroundColor: "#f9f9f9",
-				textAlign: "center",
-			}}
-		>
-			<Typography variant="h4" gutterBottom>
-				Iniciar Sesión
-			</Typography>
-			<form onSubmit={handleSubmit(onSubmit)} noValidate>
-				<Box>
-					<TextField
-						label="Email"
-						variant="outlined"
-						margin="normal"
-						fullWidth
-						autoComplete="email"
-						{...register("email", {
-							required: "El email es obligatorio",
-							pattern: {
-								value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-								message: "Formato de email inválido",
-							},
-						})}
-						error={!!errors.email}
-						helperText={errors.email ? errors.email.message : ""}
-					/>
-				</Box>
-				<Box sx={{ mb: 2 }}>
-					<TextField
-						label="Contraseña"
-						type={showPassword ? "text" : "password"}
-						variant="outlined"
-						margin="normal"
-						fullWidth
-						autoComplete="current-password"
-						{...register("contraseña", {
-							required: "La contraseña es obligatoria",
-							minLength: {
-								value: 6,
-								message: "La contraseña debe tener al menos 6 caracteres",
-							},
-						})}
-						error={!!errors.contraseña}
-						helperText={errors.contraseña ? errors.contraseña.message : ""}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<IconButton
-										aria-label="toggle password visibility"
-										onClick={handleClickShowPassword}
-										onMouseDown={handleMouseDownPassword}
-										edge="end"
-									>
-										{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-									</IconButton>
-								</InputAdornment>
-							),
-						}}
-					/>
-				</Box>
-				{errorMessage && (
-					<Alert severity="error" sx={{ mb: 4 }}>
-						{errorMessage}
-					</Alert>
-				)}
-				<Button type="submit" variant="contained" color="primary">
-					INICIAR SESIÓN
-				</Button>
-				<Box sx={{ mt: 2 }}>
-					<Typography variant="body2" align="center">
-						¿Aún no tienes cuenta?{" "}
-						<Link to="/registro" variant="body2">
-							Regístrate aquí
-						</Link>
+		<>
+			{loading ? (
+				<Spinner />
+			) : (
+				<Container
+					maxWidth="sm"
+					sx={{
+						mt: 4,
+						p: 3,
+						border: "1px solid #ccc",
+						borderRadius: "8px",
+						backgroundColor: "#f9f9f9",
+						textAlign: "center",
+					}}
+				>
+					<Typography variant="h4" gutterBottom>
+						Iniciar Sesión
 					</Typography>
-				</Box>
-			</form>
-		</Container>
+					<form onSubmit={handleSubmit(onSubmit)} noValidate>
+						<Input
+							label="Email"
+							type="email"
+							name="email"
+							register={register}
+							errors={errors}
+						/>
+
+						<Input
+							label="Contraseña"
+							type="password"
+							name="contraseña"
+							register={register}
+							errors={errors}
+							showPassword={showPassword}
+							toggleShowPassword={() => setShowPassword(!showPassword)}
+						/>
+
+						{errorMessage && (
+							<Alert severity="error" sx={{ mt: 2 }}>
+								{errorMessage}
+							</Alert>
+						)}
+						<Button
+							type="submit"
+							variant="contained"
+							color="primary"
+							sx={{ mt: 2 }}
+						>
+							INICIAR SESIÓN
+						</Button>
+						<Box sx={{ mt: 2 }}>
+							<Typography variant="body2" align="center">
+								¿Aún no tienes cuenta?{" "}
+								<Link to="/registro">Regístrate aquí</Link>
+							</Typography>
+						</Box>
+					</form>
+				</Container>
+			)}
+		</>
 	);
 };

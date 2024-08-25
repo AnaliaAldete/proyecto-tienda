@@ -59,10 +59,7 @@ export const OrderProvider = ({ children }) => {
 				}
 			}
 		};
-
-		if (usuario && carrito.length > 0) {
-			sincronizarFirebase();
-		}
+		sincronizarFirebase();
 	}, [carrito, usuario]);
 
 	const agregarAlCarrito = (producto) => {
