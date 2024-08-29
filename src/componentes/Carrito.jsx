@@ -42,7 +42,7 @@ export const Carrito = () => {
 		<>
 			<IconButton onClick={toggleDrawer(true)}>
 				<Badge color="success" badgeContent={carrito.length}>
-					<FaShoppingCart size={24} color="white" />
+					<FaShoppingCart color="white" />
 				</Badge>
 			</IconButton>
 			<Drawer

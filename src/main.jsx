@@ -6,15 +6,18 @@ import { CssBaseline } from "@mui/material";
 import { OrderProvider } from "./context/OrderContext.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/UserContext.jsx";
+import { FiltrosProvider } from "./context/FiltrosContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<BrowserRouter>
 		<UserProvider>
 			<OrderProvider>
-				<React.StrictMode>
-					<CssBaseline />
-					<App />
-				</React.StrictMode>
+				<FiltrosProvider>
+					<React.StrictMode>
+						<CssBaseline />
+						<App />
+					</React.StrictMode>
+				</FiltrosProvider>
 			</OrderProvider>
 		</UserProvider>
 	</BrowserRouter>

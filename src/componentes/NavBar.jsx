@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useContext } from "react";
 import {
 	AppBar,
 	Box,
@@ -9,28 +9,32 @@ import {
 	Container,
 	MenuItem,
 	Avatar,
+	TextField,
+	Slide,
 } from "@mui/material";
-import { useState, useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import { IoSearch } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { UserContext } from "../context/UserContext";
+import { FiltrosContext } from "../context/FiltrosContext";
 import { Carrito } from "../componentes/Carrito";
-import logo from "../assets/logo.png";
-
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+import logo2 from "../assets/logo2.png";
 
 const pages = ["Productos", "Ordenes"];
 
-export function NavBar() {
+export const NavBar = () => {
 	const { usuario } = useContext(UserContext);
-
+	const { setValueSearch } = useContext(FiltrosContext);
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
+	const [searchOpen, setSearchOpen] = useState(false);
 	const navigate = useNavigate();
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
+
 	const handleOpenUserMenu = (event) => {
 		setAnchorElUser(event.currentTarget);
 	};
@@ -54,115 +58,115 @@ export function NavBar() {
 			});
 	};
 
+	const toggleSearch = () => {
+		setSearchOpen(!searchOpen);
+	};
+
+	const handleSearch = (e) => {
+		setValueSearch(e.target.value);
+	};
+
 	return (
 		<AppBar position="sticky" sx={{ backgroundColor: "#0000FF" }}>
-			<Container maxWidth="xl" sx={{ padding: "8px 24px 8px 24px" }}>
-				<Toolbar disableGutters>
+			<Container
+				maxWidth="xl"
+				sx={{ padding: { xs: "8px", sm: "8px 24px 8px 24px" } }}
+			>
+				<Toolbar
+					disableGutters
+					sx={{ display: "flex", justifyContent: "space-between" }}
+				>
+					{/* logo para pantallas grandes */}
 					<Box
-						component="img"
-						src={logo}
-						alt="Logo"
+						component={Link}
+						to="/"
 						sx={{
-							width: 50,
-							height: 50,
-							borderRadius: "50%",
-							objectFit: "cover",
 							display: { xs: "none", md: "flex" },
-							mr: 1,
-						}}
-					/>
-					<Typography
-						variant="h6"
-						noWrap
-						href="#app-bar-with-responsive-menu"
-						sx={{
-							mr: 2,
-							display: { xs: "none", md: "flex" },
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
-							color: "inherit",
 							textDecoration: "none",
+							marginRight: { sx: 0, md: 3 },
 						}}
 					>
-						<Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-							TechLink
-						</Link>
-					</Typography>
-
-					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-						<IconButton
-							size="large"
-							aria-label="account of current user"
-							aria-controls="menu-appbar"
-							aria-haspopup="true"
-							onClick={handleOpenNavMenu}
-							color="inherit"
-							sx={{ p: 0 }}
-						>
-							<GiHamburgerMenu />
-						</IconButton>
-						<Menu
-							id="menu-appbar"
-							anchorEl={anchorElNav}
-							anchorOrigin={{
-								vertical: "bottom",
-								horizontal: "left",
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "left",
-							}}
-							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
+						<Box
+							component="img"
+							src={logo2}
+							alt="Logo"
 							sx={{
-								display: { xs: "block", md: "none" },
+								width: 160,
+							}}
+						/>
+					</Box>
+					<Box sx={{ display: "flex", gap: 1 }}>
+						{/* Menú hamburguesa*/}
+						<Box
+							sx={{
+								display: { xs: "flex", md: "none" },
 							}}
 						>
-							{pages.map((page) => (
-								<MenuItem key={page} onClick={handleCloseNavMenu}>
-									<Typography textAlign="center">
-										<Link
-											to={`/${page}`}
-											style={{ textDecoration: "none", color: "inherit" }}
-										>
-											{page}
-										</Link>
-									</Typography>
-								</MenuItem>
-							))}
-						</Menu>
+							<IconButton
+								size="large"
+								aria-label="open navigation menu"
+								aria-controls="menu-appbar"
+								aria-haspopup="true"
+								onClick={handleOpenNavMenu}
+								color="inherit"
+								sx={{ p: 0 }}
+							>
+								<GiHamburgerMenu />
+							</IconButton>
+							<Menu
+								id="menu-appbar"
+								anchorEl={anchorElNav}
+								anchorOrigin={{
+									vertical: "bottom",
+									horizontal: "left",
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: "top",
+									horizontal: "left",
+								}}
+								open={Boolean(anchorElNav)}
+								onClose={handleCloseNavMenu}
+								sx={{
+									display: { xs: "block", md: "none" },
+								}}
+							>
+								{pages.map((page) => (
+									<MenuItem key={page} onClick={handleCloseNavMenu}>
+										<Typography textAlign="center">
+											<Link
+												to={`/${page}`}
+												style={{ textDecoration: "none", color: "inherit" }}
+											>
+												{page}
+											</Link>
+										</Typography>
+									</MenuItem>
+								))}
+							</Menu>
+						</Box>
+
+						{/* Logo pantallas pequeñas */}
+						<Box
+							component={Link}
+							to="/"
+							sx={{
+								display: { xs: "flex", md: "none" },
+								textDecoration: "none",
+							}}
+						>
+							<Box
+								component="img"
+								src={logo2}
+								alt="Logo"
+								sx={{
+									width: 160,
+								}}
+							/>
+						</Box>
 					</Box>
-					<Box
-						component="img"
-						src={logo}
-						alt="Logo"
-						sx={{
-							width: 50,
-							height: 50,
-							borderRadius: "50%",
-							objectFit: "cover",
-							display: { xs: "flex", md: "none" },
-							mr: 1,
-						}}
-					/>
-					<Typography
-						variant="h5"
-						noWrap
-						href="#app-bar-with-responsive-menu"
-						sx={{
-							display: { xs: "flex", md: "none" },
-							flexGrow: 1,
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
-							color: "inherit",
-							textDecoration: "none",
-						}}
-					>
-						TechLink
-					</Typography>
+
+					{/* Páginas en pantallas grandes */}
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
 							<MenuItem key={page} onClick={handleCloseNavMenu}>
@@ -178,15 +182,30 @@ export function NavBar() {
 						))}
 					</Box>
 
-					<Box display="flex" gap="16px" sx={{ flexGrow: 0 }}>
+					{/* Ícono de búsqueda, carrito y avatar */}
+					<Box>
+						<IconButton
+							onClick={toggleSearch}
+							sx={{
+								color: "white",
+							}}
+						>
+							<IoSearch
+								sx={{
+									color: "white",
+								}}
+							/>
+						</IconButton>
 						<Carrito />
-
-						<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+						<IconButton
+							onClick={handleOpenUserMenu}
+							sx={{ paddingRight: { xs: 0, sm: "8px" } }}
+						>
 							{usuario ? (
 								<Avatar
 									sx={{
-										width: 35,
-										height: 35,
+										width: 30,
+										height: 30,
 										color: "#0000FF",
 										backgroundColor: "white",
 									}}
@@ -234,7 +253,26 @@ export function NavBar() {
 						)}
 					</Box>
 				</Toolbar>
+
+				{/* input de búsqueda */}
+				<Box sx={{ position: "relative", zIndex: 1 }}>
+					<Slide direction="down" in={searchOpen} mountOnEnter unmountOnExit>
+						<Box padding={1}>
+							<TextField
+								variant="outlined"
+								placeholder="Eso que querés, buscalo acá..."
+								fullWidth
+								size="small"
+								onChange={handleSearch}
+								sx={{
+									backgroundColor: "white",
+									borderRadius: "4px",
+								}}
+							/>
+						</Box>
+					</Slide>
+				</Box>
 			</Container>
 		</AppBar>
 	);
-}
+};

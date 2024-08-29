@@ -1,10 +1,15 @@
 import { Box, Grid } from "@mui/material";
 import { useContext } from "react";
 import { OrderContext } from "../context/OrderContext";
+import { FiltrosContext } from "../context/FiltrosContext";
 import { CardProducto } from "../componentes/CardProducto";
 
 export const ContainerProductos = () => {
 	const { productosArray } = useContext(OrderContext);
+	const { productosFiltrados } = useContext(FiltrosContext);
+	const renderArray = productosFiltrados.length
+		? productosFiltrados
+		: productosArray;
 	return (
 		<Box
 			sx={{
@@ -17,7 +22,7 @@ export const ContainerProductos = () => {
 			}}
 		>
 			<Grid container spacing={2} sx={{ maxWidth: "1100px" }}>
-				{productosArray.map((producto) => (
+				{renderArray.map((producto) => (
 					<Grid
 						item
 						xs={12}

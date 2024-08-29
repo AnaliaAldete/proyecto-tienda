@@ -10,6 +10,7 @@ export const OrderProvider = ({ children }) => {
 	const { usuario } = useContext(UserContext);
 	const [productosArray, setProductosArray] = useState([]);
 	const [carrito, setCarrito] = useState([]);
+	const [carritoInicializado, setCarritoInicializado] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -20,7 +21,7 @@ export const OrderProvider = ({ children }) => {
 		setOpenSnackbar(false);
 	};
 
-	//GET PRODUCTOS
+	// GET PRODUCTOS
 	useEffect(() => {
 		const collectionReference = collection(db, "productos");
 		const unsubscribe = onSnapshot(collectionReference, (data) => {
@@ -33,24 +34,26 @@ export const OrderProvider = ({ children }) => {
 		return () => unsubscribe();
 	}, []);
 
-	//GET CARRITO
+	// GET CARRITO
 	useEffect(() => {
 		if (usuario) {
 			const userRef = doc(db, "usuarios", usuario.id);
 			const unsubscribe = onSnapshot(userRef, (doc) => {
 				const carritoFirebase = doc.data()?.carrito || [];
 				setCarrito(carritoFirebase);
+				setCarritoInicializado(true);
 			});
 			return () => unsubscribe();
 		} else {
 			setCarrito([]);
+			setCarritoInicializado(false);
 		}
 	}, [usuario]);
 
 	// Sincronizar carrito con Firebase
 	useEffect(() => {
 		const sincronizarFirebase = async () => {
-			if (usuario) {
+			if (usuario && carritoInicializado) {
 				const userRef = doc(db, "usuarios", usuario.id);
 				try {
 					await updateDoc(userRef, { carrito });
@@ -60,7 +63,7 @@ export const OrderProvider = ({ children }) => {
 			}
 		};
 		sincronizarFirebase();
-	}, [carrito, usuario]);
+	}, [carrito, usuario, carritoInicializado]);
 
 	const agregarAlCarrito = (producto) => {
 		setCarrito((prevCarrito) => {
@@ -110,6 +113,7 @@ export const OrderProvider = ({ children }) => {
 		<OrderContext.Provider
 			value={{
 				productosArray,
+				setProductosArray,
 				carrito,
 				agregarAlCarrito,
 				eliminarDelCarrito,
