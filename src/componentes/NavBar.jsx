@@ -11,8 +11,10 @@ import {
 	Avatar,
 	TextField,
 	Slide,
+	Button,
 } from "@mui/material";
 import { IoSearch } from "react-icons/io5";
+import { IoIosArrowDown } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { UserContext } from "../context/UserContext";
 import { FiltrosContext } from "../context/FiltrosContext";
@@ -25,7 +27,13 @@ const pages = ["Productos", "Ordenes"];
 
 export const NavBar = () => {
 	const { usuario } = useContext(UserContext);
-	const { setValueSearch } = useContext(FiltrosContext);
+	const {
+		setValueSearch,
+		categorias,
+		setCategoriaSeleccionada,
+		resetearFiltros,
+		valueSearch,
+	} = useContext(FiltrosContext);
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const [searchOpen, setSearchOpen] = useState(false);
@@ -64,6 +72,18 @@ export const NavBar = () => {
 
 	const handleSearch = (e) => {
 		setValueSearch(e.target.value);
+	};
+
+	//revisar a parte de aca
+	const [anchorEl, setAnchorEl] = useState(null);
+
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleClose = (categoria) => {
+		setCategoriaSeleccionada(categoria);
+		setAnchorEl(null);
 	};
 
 	return (
@@ -132,7 +152,14 @@ export const NavBar = () => {
 								}}
 							>
 								{pages.map((page) => (
-									<MenuItem key={page} onClick={handleCloseNavMenu}>
+									<MenuItem
+										key={page}
+										onClick={
+											page === "Productos"
+												? resetearFiltros
+												: handleCloseNavMenu
+										}
+									>
 										<Typography textAlign="center">
 											<Link
 												to={`/${page}`}
@@ -169,7 +196,12 @@ export const NavBar = () => {
 					{/* Páginas en pantallas grandes */}
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
-							<MenuItem key={page} onClick={handleCloseNavMenu}>
+							<MenuItem
+								key={page}
+								onClick={
+									page === "Productos" ? resetearFiltros : handleCloseNavMenu
+								}
+							>
 								<Typography textAlign="center">
 									<Link
 										to={`/${page}`}
@@ -254,11 +286,47 @@ export const NavBar = () => {
 					</Box>
 				</Toolbar>
 
-				{/* input de búsqueda */}
 				<Box sx={{ position: "relative", zIndex: 1 }}>
 					<Slide direction="down" in={searchOpen} mountOnEnter unmountOnExit>
-						<Box padding={1}>
+						<Box
+							sx={{
+								display: "flex",
+								flexDirection: { xs: "column", sm: "row" },
+								gap: { xs: 1, md: 4 },
+								paddingTop: 2,
+								paddingBottom: { xs: 0, sm: 1 },
+							}}
+						>
+							{/* menu categorias */}
+							<Button
+								onClick={handleClick}
+								endIcon={<IoIosArrowDown />}
+								sx={{
+									color: "white",
+									paddingInline: 2,
+									order: { xs: 1, sm: 0 },
+								}}
+							>
+								Categorías
+							</Button>
+							<Menu
+								id="menu-categorias"
+								anchorEl={anchorEl}
+								open={Boolean(anchorEl)}
+								onClose={() => setAnchorEl(null)}
+							>
+								{categorias.map((categoria) => (
+									<MenuItem
+										key={categoria}
+										onClick={() => handleClose(categoria)}
+									>
+										{categoria}
+									</MenuItem>
+								))}
+							</Menu>
+							{/* input de búsqueda */}
 							<TextField
+								value={valueSearch}
 								variant="outlined"
 								placeholder="Eso que querés, buscalo acá..."
 								fullWidth
@@ -267,6 +335,7 @@ export const NavBar = () => {
 								sx={{
 									backgroundColor: "white",
 									borderRadius: "4px",
+									order: { xs: 0, sm: 1 },
 								}}
 							/>
 						</Box>
