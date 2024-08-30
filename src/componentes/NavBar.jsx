@@ -318,7 +318,10 @@ export const NavBar = () => {
 								{categorias.map((categoria) => (
 									<MenuItem
 										key={categoria}
-										onClick={() => handleClose(categoria)}
+										onClick={() => {
+											handleClose(categoria);
+											setValueSearch("");
+										}}
 									>
 										{categoria}
 									</MenuItem>

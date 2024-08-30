@@ -6,12 +6,9 @@ export const FiltrosContext = createContext(null);
 export const FiltrosProvider = ({ children }) => {
 	const { productosArray } = useContext(OrderContext);
 	const [productosFiltrados, setProductosFiltrados] = useState([]);
-	const [valueSearch, setValueSearch] = useState();
+	const [valueSearch, setValueSearch] = useState("");
 	const [categorias, setCategorias] = useState([]);
 	const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
-	console.log(productosFiltrados);
-	console.log(productosArray);
-	console.log(categorias);
 
 	useEffect(() => {
 		filtrarProductos();
