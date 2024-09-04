@@ -1,4 +1,4 @@
-import { ContainerProductos } from "./pages/Home";
+import { ContainerProductos } from "./pages/Productos";
 import { NavBar } from "./componentes/NavBar";
 import { Routes, Route } from "react-router";
 import { Login } from "./pages/Login";
@@ -7,13 +7,14 @@ import { NotFound } from "./pages/NotFound";
 import { Ordenes } from "./pages/Ordenes";
 import { CardDetalle } from "./pages/CardDetalle";
 import { Checkout } from "./pages/Checkout";
+import { Home } from "./pages/Home";
 
 function App() {
 	return (
 		<>
 			<NavBar />
 			<Routes>
-				<Route path="/" element={<ContainerProductos />}></Route>
+				<Route path="/" element={<Home />}></Route>
 				<Route path="/Login" element={<Login />}></Route>
 				<Route path="/Registro" element={<Registro />}></Route>
 				<Route path="/Productos" element={<ContainerProductos />}></Route>

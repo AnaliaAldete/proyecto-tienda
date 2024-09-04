@@ -1,46 +1,64 @@
-import { Box, Grid } from "@mui/material";
-import { useContext } from "react";
-import { OrderContext } from "../context/OrderContext";
-import { FiltrosContext } from "../context/FiltrosContext";
-import { CardProducto } from "../componentes/CardProducto";
+import { Carrusel } from "../componentes/Carrusel";
+import { Grid, Typography, Card, CardContent, Box } from "@mui/material";
+import { FaTruck, FaRegCreditCard, FaCheck } from "react-icons/fa";
 
-export const ContainerProductos = () => {
-	const { productosArray } = useContext(OrderContext);
-	const { productosFiltrados } = useContext(FiltrosContext);
-	const renderArray = productosFiltrados.length
-		? productosFiltrados
-		: productosArray;
+export const Home = () => {
 	return (
 		<Box
 			sx={{
-				flexGrow: 1,
-				padding: 4,
 				backgroundColor: "#f5f5f5",
 				display: "flex",
-				justifyContent: "center",
-				minHeight: "80vh",
+				flexDirection: "column",
+				gap: { xs: 2, sm: 5 },
 			}}
 		>
-			<Grid container spacing={2} sx={{ maxWidth: "1100px" }}>
-				{renderArray.map((producto) => (
-					<Grid
-						item
-						xs={12}
-						sm={6}
-						md={4}
-						display="flex"
-						justifyContent="center"
-						key={producto.id}
+			<Carrusel />
+			<Grid container paddingInline={2} gap={2} justifyContent={"center"}>
+				<Grid item xs={12} sm={6} md={3}>
+					<Card sx={{ display: "flex", justifyContent: "center" }}>
+						<CardContent sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+							<FaTruck size={35} />
+							<Box textAlign={"center"}>
+								<Typography variant="h6" gutterBottom>
+									Entrega gratis
+								</Typography>
+								<Typography variant="body2">A partir de $100.000</Typography>
+							</Box>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid item xs={12} sm={6} md={3}>
+					<Card
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+						}}
 					>
-						<CardProducto
-							nombre={producto.nombre}
-							precio={producto.precio}
-							descripcion={producto.descripcion}
-							imagen={producto.imagen}
-							id={producto.id}
-						/>
-					</Grid>
-				))}
+						<CardContent sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+							<FaRegCreditCard size={35} />
+
+							<Box textAlign={"center"}>
+								<Typography variant="h6" gutterBottom>
+									Cuotas sin interés
+								</Typography>
+								<Typography variant="body2">En seleccionados</Typography>
+							</Box>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid item xs={12} sm={6} md={3}>
+					<Card sx={{ display: "flex", justifyContent: "center" }}>
+						<CardContent sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+							<FaCheck size={35} />
+							<Box textAlign={"center"}>
+								<Typography variant="h6" gutterBottom>
+									Compra Segura
+								</Typography>
+								<Typography variant="body2">Con garantía oficial</Typography>
+							</Box>
+						</CardContent>
+					</Card>
+				</Grid>
 			</Grid>
 		</Box>
 	);
