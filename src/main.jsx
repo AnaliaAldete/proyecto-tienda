@@ -1,10 +1,24 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+import { CssBaseline } from "@mui/material";
+import { OrderProvider } from "./context/OrderContext.jsx";
+import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./context/UserContext.jsx";
+import { FiltrosProvider } from "./context/FiltrosContext.jsx";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById("root")).render(
+	<BrowserRouter>
+		<UserProvider>
+			<OrderProvider>
+				<FiltrosProvider>
+					<React.StrictMode>
+						<CssBaseline />
+						<App />
+					</React.StrictMode>
+				</FiltrosProvider>
+			</OrderProvider>
+		</UserProvider>
+	</BrowserRouter>
+);
