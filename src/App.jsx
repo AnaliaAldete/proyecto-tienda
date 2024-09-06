@@ -8,6 +8,7 @@ import { Ordenes } from "./pages/Ordenes";
 import { CardDetalle } from "./pages/CardDetalle";
 import { Checkout } from "./pages/Checkout";
 import { Home } from "./pages/Home";
+import Footer from "./componentes/Footer";
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="*" element={<NotFound />}></Route>
 			</Routes>
+			<Footer />
 		</>
 	);
 }

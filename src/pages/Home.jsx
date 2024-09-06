@@ -1,8 +1,17 @@
+import React, { useContext } from "react";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
 import { Carrusel } from "../componentes/Carrusel";
+import { CardProducto } from "../componentes/CardProducto";
 import { Grid, Typography, Card, CardContent, Box } from "@mui/material";
 import { FaTruck, FaRegCreditCard, FaCheck } from "react-icons/fa";
+import { OrderContext } from "../context/OrderContext";
 
 export const Home = () => {
+	const { productosArray } = useContext(OrderContext);
+
+	const productosDestacados = productosArray.slice(0, 6);
+
 	return (
 		<Box
 			sx={{
@@ -10,6 +19,7 @@ export const Home = () => {
 				display: "flex",
 				flexDirection: "column",
 				gap: { xs: 2, sm: 5 },
+				paddingBottom: "40px",
 			}}
 		>
 			<Carrusel />
@@ -60,6 +70,58 @@ export const Home = () => {
 					</Card>
 				</Grid>
 			</Grid>
+			<Box paddingInline={1}>
+				<Typography
+					variant="h4"
+					gutterBottom
+					textAlign={"center"}
+					sx={{
+						fontSize: {
+							xs: "2rem",
+							sm: "2.5rem",
+						},
+					}}
+				>
+					Productos Destacados
+				</Typography>
+				<Splide
+					options={{
+						perPage: 3,
+						perMove: 1,
+						gap: 16,
+						arrows: true,
+						pagination: true,
+						breakpoints: {
+							640: {
+								perPage: 1,
+							},
+							768: {
+								perPage: 2,
+							},
+						},
+						padding: 10,
+					}}
+				>
+					{productosDestacados.map((producto) => (
+						<SplideSlide
+							key={producto.id}
+							style={{
+								marginBottom: "8px",
+								display: "flex",
+								justifyContent: "center",
+							}}
+						>
+							<CardProducto
+								nombre={producto.nombre}
+								precio={producto.precio}
+								descripcion={producto.descripcion}
+								imagen={producto.imagen}
+								id={producto.id}
+							/>
+						</SplideSlide>
+					))}
+				</Splide>
+			</Box>
 		</Box>
 	);
 };

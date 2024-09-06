@@ -19,7 +19,7 @@ export const CardProducto = ({ id, nombre, precio, descripcion, imagen }) => {
 	return (
 		<Card
 			sx={{
-				maxWidth: 345,
+				maxWidth: 330,
 				borderRadius: 2,
 				boxShadow: "0px 4px 8px rgb(0 0 0 / 50%)",
 			}}
