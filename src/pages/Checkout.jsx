@@ -1,7 +1,6 @@
 import React from "react";
 import { useContext, useState, useEffect } from "react";
 import {
-	Box,
 	Typography,
 	Avatar,
 	Button,
@@ -77,116 +76,127 @@ export const Checkout = () => {
 	const handleCloseErrorSnackbar = () => {
 		setOpenErrorSnackbar(false);
 	};
-	if (loading) {
-		return <Spinner />;
-	}
-	return (
-		<Container maxWidth="md" sx={{ minHeight: "80vh" }}>
-			<Box
-				p={3}
-				display="flex"
-				flexDirection={"column"}
-				alignItems="center"
-				gap={3}
-			>
-				<Typography variant="h4">Checkout</Typography>
-				<TableContainer component={Paper}>
-					<Table>
-						<TableHead>
-							<TableRow>
-								{!celu && <TableCell></TableCell>}
-								<TableCell>Producto</TableCell>
-								{!celu && <TableCell align="right">Precio</TableCell>}
-								{!celu && <TableCell align="right">Cantidad</TableCell>}
-								<TableCell align="right">Total</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{carrito.map((producto) => (
-								<TableRow key={producto.id}>
-									{!celu && (
-										<TableCell sx={{ maxWidth: 60 }}>
-											<Avatar
-												src={producto.imagen}
-												alt={producto.nombre}
-												sx={{ width: 56, height: 56 }}
-											/>
-										</TableCell>
-									)}
-									<TableCell component="th" scope="row">
-										{producto.nombre}
-										{celu && (
-											<Typography variant="body2" mt={1}>
-												${producto.precio} x {producto.cantidad}
-											</Typography>
-										)}
-									</TableCell>
-									{!celu && (
-										<TableCell align="right">${producto.precio}</TableCell>
-									)}
 
-									{!celu && (
-										<TableCell align="right">{producto.cantidad}</TableCell>
-									)}
-									<TableCell align="right">
-										${producto.precio * producto.cantidad}
-									</TableCell>
-								</TableRow>
-							))}
-							<TableRow>
-								<TableCell colSpan={celu ? 1 : 4} align="right">
-									<Typography variant="h6">Total:</Typography>
-								</TableCell>
-								<TableCell align="right">
-									<Typography variant="h6">${total}</Typography>
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</TableContainer>
-				<Button variant="contained" color="primary" onClick={confirmarPedido}>
-					Confirmar pedido
-				</Button>
-				<Link to="/productos">Seguir comprando</Link>
-			</Box>
-			<Dialog
-				open={openDialog}
-				aria-labelledby="confirmacion-dialog-title"
-				aria-describedby="confirmacion-dialog-description"
-				PaperProps={{
-					sx: {
+	return (
+		<>
+			{loading ? (
+				<Spinner />
+			) : (
+				<Container
+					maxWidth="md"
+					sx={{
+						marginBlock: { xs: "30px", sm: "50px" },
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
-					},
-				}}
-			>
-				<DialogTitle id="confirmacion-dialog-title">
-					¡Pedido confirmado!
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="confirmacion-dialog-description">
-						Tu pedido ha sido confirmado con éxito.
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
+						gap: 3,
+						p: 0,
+					}}
+				>
+					<Typography variant="h4">Checkout</Typography>
+					<TableContainer component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									{!celu && <TableCell></TableCell>}
+									<TableCell>Producto</TableCell>
+									{!celu && <TableCell align="right">Precio</TableCell>}
+									{!celu && <TableCell align="right">Cantidad</TableCell>}
+									<TableCell align="right">Total</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{carrito.map((producto) => (
+									<TableRow key={producto.id}>
+										{!celu && (
+											<TableCell sx={{ maxWidth: 60 }}>
+												<Avatar
+													src={producto.imagen}
+													alt={producto.nombre}
+													sx={{ width: 56, height: 56 }}
+												/>
+											</TableCell>
+										)}
+										<TableCell component="th" scope="row">
+											{producto.nombre}
+											{celu && (
+												<Typography variant="body2" mt={1}>
+													${producto.precio} x {producto.cantidad}
+												</Typography>
+											)}
+										</TableCell>
+										{!celu && (
+											<TableCell align="right">${producto.precio}</TableCell>
+										)}
+
+										{!celu && (
+											<TableCell align="right">{producto.cantidad}</TableCell>
+										)}
+										<TableCell align="right">
+											${producto.precio * producto.cantidad}
+										</TableCell>
+									</TableRow>
+								))}
+								<TableRow>
+									<TableCell colSpan={celu ? 1 : 4} align="right">
+										<Typography variant="h6">Total:</Typography>
+									</TableCell>
+									<TableCell align="right">
+										<Typography variant="h6">${total}</Typography>
+									</TableCell>
+								</TableRow>
+							</TableBody>
+						</Table>
+					</TableContainer>
 					<Button
-						onClick={handleCloseDialog}
-						color="primary"
 						variant="contained"
-						size="small"
-						autoFocus
+						onClick={confirmarPedido}
+						sx={{ backgroundColor: "#0000FF" }}
 					>
-						Volver al inicio
+						Confirmar pedido
 					</Button>
-				</DialogActions>
-			</Dialog>
-			<Snackbar
-				open={openErrorSnackbar}
-				autoHideDuration={6000}
-				onClose={handleCloseErrorSnackbar}
-				message="Error al confirmar el pedido. Inténtalo de nuevo."
-			/>
-		</Container>
+					<Link to="/productos">Seguir comprando</Link>
+
+					<Dialog
+						open={openDialog}
+						aria-labelledby="confirmacion-dialog-title"
+						aria-describedby="confirmacion-dialog-description"
+						PaperProps={{
+							sx: {
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+							},
+						}}
+					>
+						<DialogTitle id="confirmacion-dialog-title">
+							¡Pedido confirmado!
+						</DialogTitle>
+						<DialogContent>
+							<DialogContentText id="confirmacion-dialog-description">
+								Tu pedido ha sido confirmado con éxito.
+							</DialogContentText>
+						</DialogContent>
+						<DialogActions>
+							<Button
+								onClick={handleCloseDialog}
+								variant="contained"
+								size="small"
+								autoFocus
+								sx={{ backgroundColor: "#0000FF" }}
+							>
+								Volver al inicio
+							</Button>
+						</DialogActions>
+					</Dialog>
+					<Snackbar
+						open={openErrorSnackbar}
+						autoHideDuration={6000}
+						onClose={handleCloseErrorSnackbar}
+						message="Error al confirmar el pedido. Inténtalo de nuevo."
+					/>
+				</Container>
+			)}
+		</>
 	);
 };

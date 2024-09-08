@@ -13,15 +13,13 @@ export const ContainerProductos = () => {
 	return (
 		<Box
 			sx={{
-				flexGrow: 1,
-				padding: 4,
-				backgroundColor: "#f5f5f5",
-				display: "flex",
-				justifyContent: "center",
-				minHeight: "80vh",
+				paddingBlock: 4,
+				paddingInline: { xs: 0, md: "24px" },
+				maxWidth: "1100px",
+				width: "100%",
 			}}
 		>
-			<Grid container spacing={2} sx={{ maxWidth: "1100px" }}>
+			<Grid container spacing={2} justifyContent={"center"}>
 				{renderArray.map((producto) => (
 					<Grid
 						item

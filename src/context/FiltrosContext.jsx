@@ -20,8 +20,12 @@ export const FiltrosProvider = ({ children }) => {
 
 	const filtrarProductos = () => {
 		if (valueSearch) {
+			const normalizeString = (str) =>
+				str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 			const arrayFiltrado = productosArray.filter((producto) =>
-				producto.nombre.toLowerCase().includes(valueSearch.toLowerCase())
+				normalizeString(producto.nombre.toLowerCase()).includes(
+					normalizeString(valueSearch.toLowerCase())
+				)
 			);
 			setProductosFiltrados(arrayFiltrado);
 		} else if (categoriaSeleccionada && categoriaSeleccionada !== "Todas") {

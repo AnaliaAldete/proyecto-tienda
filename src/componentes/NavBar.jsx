@@ -1,4 +1,9 @@
 import React, { useState, useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import { FiltrosContext } from "../context/FiltrosContext";
+import { Carrito } from "../componentes/Carrito";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate, Link } from "react-router-dom";
 import {
 	AppBar,
 	Box,
@@ -16,11 +21,6 @@ import {
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { UserContext } from "../context/UserContext";
-import { FiltrosContext } from "../context/FiltrosContext";
-import { Carrito } from "../componentes/Carrito";
-import { getAuth, signOut } from "firebase/auth";
-import { useNavigate, Link } from "react-router-dom";
 import logo2 from "../assets/logo2.png";
 
 const pages = ["Productos", "Ordenes"];
@@ -36,16 +36,9 @@ export const NavBar = () => {
 	} = useContext(FiltrosContext);
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
+	const [anchorEl, setAnchorEl] = useState(null);
 	const [searchOpen, setSearchOpen] = useState(false);
 	const navigate = useNavigate();
-
-	const handleOpenNavMenu = (event) => {
-		setAnchorElNav(event.currentTarget);
-	};
-
-	const handleOpenUserMenu = (event) => {
-		setAnchorElUser(event.currentTarget);
-	};
 
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
@@ -66,28 +59,21 @@ export const NavBar = () => {
 			});
 	};
 
-	const toggleSearch = () => {
-		setSearchOpen(!searchOpen);
-	};
-
-	const handleSearch = (e) => {
-		setValueSearch(e.target.value);
-	};
-
-	//revisar a parte de aca
-	const [anchorEl, setAnchorEl] = useState(null);
-
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
 	const handleClose = (categoria) => {
 		setCategoriaSeleccionada(categoria);
 		setAnchorEl(null);
 	};
 
 	return (
-		<AppBar position="sticky" sx={{ backgroundColor: "#0000FF" }}>
+		<AppBar
+			position="sticky"
+			sx={{
+				backgroundColor: "#0000FF",
+				minHeight: "10vh",
+				display: "flex",
+				justifyContent: "center",
+			}}
+		>
 			<Container
 				maxWidth="xl"
 				sx={{ padding: { xs: "8px", sm: "8px 24px 8px 24px" } }}
@@ -127,7 +113,9 @@ export const NavBar = () => {
 								aria-label="open navigation menu"
 								aria-controls="menu-appbar"
 								aria-haspopup="true"
-								onClick={handleOpenNavMenu}
+								onClick={(e) => {
+									setAnchorElNav(e.currentTarget);
+								}}
 								color="inherit"
 								sx={{ p: 0 }}
 							>
@@ -154,11 +142,13 @@ export const NavBar = () => {
 								{pages.map((page) => (
 									<MenuItem
 										key={page}
-										onClick={
-											page === "Productos"
-												? resetearFiltros
-												: handleCloseNavMenu
-										}
+										onClick={() => {
+											if (page === "Productos") {
+												resetearFiltros();
+												handleCloseNavMenu();
+											}
+											handleCloseNavMenu();
+										}}
 									>
 										<Typography textAlign="center">
 											<Link
@@ -217,12 +207,15 @@ export const NavBar = () => {
 					{/* Ícono de búsqueda, carrito y avatar */}
 					<Box>
 						<IconButton
-							onClick={toggleSearch}
+							onClick={() => {
+								setSearchOpen(!searchOpen);
+							}}
 							sx={{
 								color: "white",
 							}}
 						>
 							<IoSearch
+								aria-label="Buscar productos"
 								sx={{
 									color: "white",
 								}}
@@ -230,7 +223,9 @@ export const NavBar = () => {
 						</IconButton>
 						<Carrito />
 						<IconButton
-							onClick={handleOpenUserMenu}
+							onClick={(e) => {
+								setAnchorElUser(e.currentTarget);
+							}}
 							sx={{ paddingRight: { xs: 0, sm: "8px" } }}
 						>
 							{usuario ? (
@@ -299,7 +294,9 @@ export const NavBar = () => {
 						>
 							{/* menu categorias */}
 							<Button
-								onClick={handleClick}
+								onClick={(event) => {
+									setAnchorEl(event.currentTarget);
+								}}
 								endIcon={<IoIosArrowDown />}
 								sx={{
 									color: "white",
@@ -334,7 +331,9 @@ export const NavBar = () => {
 								placeholder="Eso que querés, buscalo acá..."
 								fullWidth
 								size="small"
-								onChange={handleSearch}
+								onChange={(e) => {
+									setValueSearch(e.target.value);
+								}}
 								sx={{
 									backgroundColor: "white",
 									borderRadius: "4px",

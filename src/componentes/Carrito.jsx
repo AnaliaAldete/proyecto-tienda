@@ -196,6 +196,7 @@ export const Carrito = () => {
 								sx={{
 									alignSelf: "center",
 									marginBlock: "16px",
+									backgroundColor: "#0000FF",
 								}}
 								onClick={finalizarCompra}
 							>
