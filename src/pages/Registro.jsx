@@ -65,7 +65,7 @@ export const Registro = () => {
 				<Container
 					maxWidth="sm"
 					sx={{
-						mt: 4,
+						marginBlock: { xs: "30px", sm: "50px" },
 						p: 3,
 						border: "1px solid #ccc",
 						borderRadius: "8px",
@@ -111,8 +111,7 @@ export const Registro = () => {
 						<Button
 							type="submit"
 							variant="contained"
-							color="primary"
-							sx={{ mt: 2 }}
+							sx={{ mt: 2, backgroundColor: "#0000FF" }}
 						>
 							Registrarse
 						</Button>

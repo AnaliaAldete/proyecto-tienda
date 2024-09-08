@@ -2,7 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { OrderContext } from "../context/OrderContext";
 import { UserContext } from "../context/UserContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import {
 	Card,
 	CardContent,
@@ -34,26 +34,23 @@ export const CardDetalle = () => {
 	};
 	return (
 		<Container
-			maxWidth="md"
+			maxWidth="sm"
 			sx={{
-				display: "flex",
-				justifyContent: "center",
-				minHeight: "80vh",
+				marginBlock: { xs: "30px", sm: "50px" },
+				padding: 0,
 			}}
 		>
-			<Card
-				sx={{ maxWidth: 600, margin: "auto", borderRadius: 2, boxShadow: 3 }}
-			>
+			<Card sx={{ maxWidth: 600, borderRadius: 2, boxShadow: 3 }}>
 				<Grid container sx={{ position: "relative" }}>
 					<IconButton
+						component={Link}
+						to="/productos"
 						sx={{
 							position: "absolute",
 							top: 0,
 							right: 0,
 							padding: "2px",
-						}}
-						onClick={() => {
-							navigate("/productos");
+							color: { xs: "white", sm: "rgba(0, 0, 0, 0.54)" },
 						}}
 					>
 						<IoIosClose />
@@ -80,7 +77,14 @@ export const CardDetalle = () => {
 							<Typography variant="h5" component="div" gutterBottom>
 								{producto.nombre}
 							</Typography>
-							<Typography variant="body2" color="text.secondary" paragraph>
+							<Typography
+								variant="body2"
+								color="text.secondary"
+								paragraph
+								sx={{
+									textAlign: { xs: "center", sm: "left" },
+								}}
+							>
 								{producto.descripcionLarga}
 							</Typography>
 							<Typography variant="h6" color="text.primary" gutterBottom>

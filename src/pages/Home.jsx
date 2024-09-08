@@ -20,10 +20,18 @@ export const Home = () => {
 				flexDirection: "column",
 				gap: { xs: 2, sm: 5 },
 				paddingBottom: "40px",
+				width: "100%",
 			}}
 		>
 			<Carrusel />
-			<Grid container paddingInline={2} gap={2} justifyContent={"center"}>
+
+			{/* cards informativas */}
+			<Grid
+				container
+				gap={2}
+				justifyContent={"center"}
+				sx={{ maxWidth: "1100px", margin: "auto" }}
+			>
 				<Grid item xs={12} sm={6} md={3}>
 					<Card sx={{ display: "flex", justifyContent: "center" }}>
 						<CardContent sx={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -70,7 +78,11 @@ export const Home = () => {
 					</Card>
 				</Grid>
 			</Grid>
-			<Box paddingInline={1}>
+			{/* carrusel productos destacados */}
+			<Box
+				paddingInline={{ xs: 0, sm: 1 }}
+				sx={{ maxWidth: "1100px", margin: "auto", width: "100%" }}
+			>
 				<Typography
 					variant="h4"
 					gutterBottom
@@ -94,6 +106,7 @@ export const Home = () => {
 						breakpoints: {
 							640: {
 								perPage: 1,
+								arrows: false,
 							},
 							768: {
 								perPage: 2,

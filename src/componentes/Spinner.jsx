@@ -6,7 +6,7 @@ export const Spinner = () => {
 		<Container
 			maxWidth="sm"
 			sx={{
-				minHeight: "80vh",
+				minHeight: "85vh",
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",

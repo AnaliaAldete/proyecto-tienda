@@ -7,9 +7,10 @@ export const Footer = () => {
 			component="footer"
 			sx={{
 				bgcolor: "#0000FF",
-				padding: "1rem",
+				padding: "16px 16px 8px 16px",
 				color: "white",
 				textAlign: { xs: "center", md: "left" },
+				minHeight: "20vh",
 			}}
 		>
 			<Grid container>
@@ -19,10 +20,7 @@ export const Footer = () => {
 						Atención al Cliente:
 					</Typography>
 					<Typography variant="body2" gutterBottom>
-						0810-364-567
-					</Typography>
-					<Typography variant="body2" gutterBottom>
-						Lunes a viernes de 9 a 18hs.
+						0810-364-567.Lunes a viernes de 9 a 18hs.
 					</Typography>
 					<Typography variant="body2">consultas@techlink.com.ar</Typography>
 				</Grid>
@@ -55,15 +53,15 @@ export const Footer = () => {
 							justifyContent: { xs: "center", md: "flex-start" },
 						}}
 					>
-						<FaCcVisa size={30} color="#fff" />
-						<FaCcMastercard size={30} color="#fff" />
-						<FaPaypal size={30} color="#fff" />
+						<FaCcVisa size={25} color="#fff" />
+						<FaCcMastercard size={25} color="#fff" />
+						<FaPaypal size={25} color="#fff" />
 					</Box>
 				</Grid>
 			</Grid>
 			<Typography
 				variant="body2"
-				sx={{ marginTop: "2rem", textAlign: "center" }}
+				sx={{ marginTop: "30px", textAlign: "center" }}
 			>
 				© 2024 TechLink. Todos los derechos reservados.
 			</Typography>

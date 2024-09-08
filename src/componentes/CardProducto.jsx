@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
 	Card,
@@ -11,11 +11,6 @@ import {
 } from "@mui/material";
 
 export const CardProducto = ({ id, nombre, precio, descripcion, imagen }) => {
-	const navigate = useNavigate();
-	const handleVerDetalle = () => {
-		navigate(`/cardDetalle/${id}`);
-	};
-
 	return (
 		<Card
 			sx={{
@@ -48,8 +43,9 @@ export const CardProducto = ({ id, nombre, precio, descripcion, imagen }) => {
 				<Button
 					variant="contained"
 					size="small"
+					component={Link}
+					to={`/cardDetalle/${id}`}
 					sx={{ backgroundColor: "#0000FF" }}
-					onClick={handleVerDetalle}
 				>
 					Ver detalle
 				</Button>

@@ -38,45 +38,53 @@ export const Ordenes = () => {
 		}
 	}, [usuario, loading, navigate]);
 
-	if (loading) {
-		return <Spinner />;
-	}
-
 	return (
-		<Container maxWidth="md" sx={{ minHeight: "80vh", padding: 4 }}>
-			<Typography variant="h4" gutterBottom align="center">
-				Órdenes
-			</Typography>
-			<TableContainer component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Fecha</TableCell>
-							<TableCell>Productos</TableCell>
-							<TableCell align="right">Total</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{ordenes.map((orden, index) => (
-							<TableRow key={index}>
-								<TableCell>
-									{new Date(orden.fecha).toLocaleDateString()}
-								</TableCell>
-								<TableCell>
-									{orden.productos.map((producto) => (
-										<Box key={producto.id}>
-											<Typography variant="body2">
-												{producto.nombre} x {producto.cantidad}
-											</Typography>
-										</Box>
-									))}
-								</TableCell>
-								<TableCell align="right">${orden.total}</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Container>
+		<>
+			{loading ? (
+				<Spinner />
+			) : (
+				<Container
+					maxWidth="md"
+					sx={{
+						marginBlock: "30px",
+						padding: 0,
+					}}
+				>
+					<Typography variant="h4" gutterBottom align="center">
+						Órdenes
+					</Typography>
+					<TableContainer component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>Fecha</TableCell>
+									<TableCell>Productos</TableCell>
+									<TableCell align="right">Total</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{ordenes.map((orden, index) => (
+									<TableRow key={index}>
+										<TableCell>
+											{new Date(orden.fecha).toLocaleDateString()}
+										</TableCell>
+										<TableCell>
+											{orden.productos.map((producto) => (
+												<Box key={producto.id}>
+													<Typography variant="body2">
+														{producto.nombre} x {producto.cantidad}
+													</Typography>
+												</Box>
+											))}
+										</TableCell>
+										<TableCell align="right">${orden.total}</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</Container>
+			)}
+		</>
 	);
 };

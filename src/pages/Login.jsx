@@ -43,9 +43,6 @@ export const Login = () => {
 				setErrorMessage(message);
 			});
 	};
-	if (loading) {
-		return <Spinner />;
-	}
 
 	return (
 		<>
@@ -55,12 +52,12 @@ export const Login = () => {
 				<Container
 					maxWidth="sm"
 					sx={{
-						mt: 4,
 						p: 3,
 						border: "1px solid #ccc",
 						borderRadius: "8px",
-						backgroundColor: "#f9f9f9",
 						textAlign: "center",
+						backgroundColor: "#f9f9f9",
+						marginBlock: { xs: "30px", sm: "50px" },
 					}}
 				>
 					<Typography variant="h4" gutterBottom>
@@ -94,17 +91,16 @@ export const Login = () => {
 							type="submit"
 							variant="contained"
 							color="primary"
-							sx={{ mt: 2 }}
+							sx={{ mt: 2, backgroundColor: "#0000FF" }}
 						>
 							INICIAR SESIÓN
 						</Button>
-						<Box sx={{ mt: 2 }}>
-							<Typography variant="body2" align="center">
-								¿Aún no tienes cuenta?{" "}
-								<Link to="/registro">Regístrate aquí</Link>
-							</Typography>
-						</Box>
 					</form>
+					<Box sx={{ mt: 2 }}>
+						<Typography variant="body2" align="center">
+							¿Aún no tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
+						</Typography>
+					</Box>
 				</Container>
 			)}
 		</>
