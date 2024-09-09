@@ -9,19 +9,21 @@ export const NotFound = () => {
 			sx={{
 				backgroundImage: `url(${error404})`,
 				backgroundSize: "cover",
-				width: "100%",
+				width: { xs: "calc(100% + 32px)", sm: "100%" },
+				marginInline: { xs: "-16px", sm: "0" },
 				height: "85vh",
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
 				flexDirection: "column",
 				gap: 3,
+				padding: 2,
 			}}
 		>
 			<Typography variant="h2" color={"white"}>
 				ERROR 404
 			</Typography>
-			<Typography variant="h5" color={"white"}>
+			<Typography variant="h5" color={"white"} textAlign={"center"}>
 				Parece que no podemos encontrar la página que está buscando
 			</Typography>
 			<Button

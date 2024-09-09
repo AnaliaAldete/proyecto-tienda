@@ -8,7 +8,7 @@ import { Ordenes } from "./pages/Ordenes";
 import { CardDetalle } from "./pages/CardDetalle";
 import { Checkout } from "./pages/Checkout";
 import { Home } from "./pages/Home";
-import Footer from "./componentes/Footer";
+import { Footer } from "./componentes/Footer";
 import { Box } from "@mui/material";
 
 function App() {
